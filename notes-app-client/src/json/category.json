@@ -1,0 +1,34 @@
+[
+  {
+      "value": "personal",
+      "label": "Personnelles"
+  },
+  {
+      "value": "professional",
+      "label": "Professionnelles"
+  },
+  {
+      "value": "studies and Learning",
+      "label": "Études et Apprentissage"
+  },
+  {
+      "value": "health",
+      "label": "Santé et Bien-être"
+  },
+  {
+      "value": "finances",
+      "label": "Finances"
+  },
+  {
+      "value": "daily Life",
+      "label": "Vie Quotidienne"
+  },
+  {
+      "value": "travel and Leisure",
+      "label": "Voyages et Loisirs"
+  },
+  {
+      "value": "ideas and creativity",
+      "label": "Idées et Créativité"
+  }
+]

@@ -1,0 +1,23 @@
+.pagination-nav {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.pagination .active,
+.btn-pagination:hover {
+  color: white;
+  background-color: #020617;
+  /* border-radius: 4px; */
+}
+.pagination {
+  background: transparent;
+  margin-bottom: 0;
+  color: grey;
+}
+.btn-pagination:disabled:hover {
+  background-color: transparent;
+  color:black
+}
+.btn-pagination.active:hover {
+  background-color: #e11d48;
+  color:white
+}
