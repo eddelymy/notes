@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faXmark } from '@fortawesome/free-solid-svg-icons'
 import ModalComponent from '../../common/ModalComponent'
 import categoryService from '../../../service/category/category.service'
+import { setErrors } from '../../../helpers/error'
 import { useState } from 'react'
 
 export default function AddCategory(){
@@ -10,31 +11,46 @@ export default function AddCategory(){
   const [show,setShow] = useState(false)
   const [category,setCategory] = useState('')
   const [label,setLabel] = useState('')
-  const [labels,setLabels] = useState([])
+  const [labels,setLabels] = useState(new Set([]))
+  const [errors,setErr] = useState({})
 
   function close(){
     setShow(false)
   }
   async function submit(){
-    const response = await categoryService.addCategory({category:category,label:labels})
-    console.log(response)
-    cancel()
-    close()
+    setErr({})
+    try{
+      const response = await categoryService.addCategory({category:category,label:[...labels]})
+      cancel()
+      close()
+    }catch(error){
+      setErr(setErrors(error))
+    }
+    
   }
   function handleKeyDown(e){
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && label ) {
       e.preventDefault()
-      setLabels(prev=>[...prev,label])
+      setLabels(prev=>{
+        const newSet = new Set([...prev])
+        newSet.add(label)
+
+        return newSet
+      })
       setLabel('')
     }
   }
   function deleteLabel(item){
-    const result = labels.filter((elmt) => elmt != item)
-    setLabels([...result])
+
+    setLabels(prev=>{
+      const newSet = new Set([...prev])
+      newSet.delete(item)
+      return newSet
+    })
   }
   function cancel(){
     setCategory('')
-    setLabels([])
+    setLabels(new Set([]))
   }
   return(
     <div className="mt-10 w-full">
@@ -54,6 +70,9 @@ export default function AddCategory(){
               value={category}
               onChange={(e)=>{setCategory(e.target.value)}}
               />
+            {errors.category && <div id="farmError" className="text-red-700">
+              { errors.category }
+            </div>}
           </div>
           <div className="flex flex-col mt-4">
             <label>
@@ -65,9 +84,12 @@ export default function AddCategory(){
               value={label}
               onChange={(e)=>{setLabel(e.target.value)}}
               onKeyDown={(e)=>handleKeyDown(e)}/>
-            {labels.length !== 0 && (
+            {errors.label && <div id="labelError" className="text-red-700">
+              { errors.label }
+            </div>}
+            {labels.size !== 0 && (
                 <div className="mt-2 w-full flex flex-wrap">
-                  {labels.map((item, index) => (
+                  {[...labels].map((item, index) => (
                     <div key={index} className='ml-2 my-1 p-2 rounded-md border border-1 flex justify-items-center'>
                       <span className='mr-2'>{item}</span>
                       <button type='button' onClick={(e)=>deleteLabel(item)}>

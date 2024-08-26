@@ -1,6 +1,12 @@
 import axios from '../axios'
 import routes from './routes'
+import validateData from '../../helpers/validateForm'
+import {string,array,object} from 'yup'
 
+let categorySchema = object({
+  category: string().label('category').required(),
+  label: array().label('label').of(string()).min(1).required('Ce champ est obligatoire')
+})
 export default {
   async getCategories() {
     try{
@@ -14,12 +20,7 @@ export default {
     }
   },
   async addCategory(category){
-    try{
-      const data = await axios().post(routes.category.create.url,category)
-
-      return data
-    }catch(error){
-      console.log(error)
-    }
+    await validateData(categorySchema,category)
+    return await axios().post(routes.category.create.url, category)
   }
 }
