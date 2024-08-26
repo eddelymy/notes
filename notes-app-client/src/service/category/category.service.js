@@ -10,6 +10,16 @@ export default {
 
     }catch(error){
       console.log(error) 
+      return []
     }
   },
+  async addCategory(category){
+    try{
+      const data = await axios().post(routes.category.create.url,category)
+
+      return data
+    }catch(error){
+      console.log(error)
+    }
+  }
 }

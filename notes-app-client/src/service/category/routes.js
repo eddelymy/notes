@@ -3,8 +3,13 @@ export default {
     index: {
       name: 'category.index',
       method: 'GET',
-      url: `categories`
+      url: 'categories'
     },
+    create:{
+      name:'category.create',
+      method:'POST',
+      url:'/category/new'
+    }
     
   }
 }

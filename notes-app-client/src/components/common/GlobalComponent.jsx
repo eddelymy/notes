@@ -8,7 +8,10 @@ export default function GlobalComponent(){
     <>
       <div className={"h-screen w-full grid grid-cols-gridColmn"}>
           <SideBar/>
-          <Outlet/>
+          <div className="w-full h-full overflow-auto bg-[#f4f1f8] p-5">
+            <Outlet/>
+          </div>
+          
       </div>
     </>
   )

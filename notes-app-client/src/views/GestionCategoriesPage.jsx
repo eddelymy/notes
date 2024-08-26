@@ -9,6 +9,7 @@ import { faCopy, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import category from '../json/category.json'
 import categoryService from '../service/category/category.service'
+import AddCategory from '../components/pages/category/AddCategory'
 
 export default function GestionCategoriesPage(){
 
@@ -43,33 +44,31 @@ export default function GestionCategoriesPage(){
           }
       }
   ]
-  const loading = false
   const [dataTable,setDataTable] = useState([])
+  const [selectedColumn,setSelectedColumn] = useState(null)
+  const [selectedCategory,setSelectedCategory] = useState(null)
+  const [label,setLabel] = useState('')
+  const loading = false
   let size = 10
   let currentPage = 0
   let totalPages = 1
   let totalItems = 1
-  const [selectedColumn,setSelectedColumn] = useState(null)
-  const [selectedCategory,setSelectedCategory] = useState(null)
-  const [label,setLabel] = useState('')
 
-  async function getcate(){
+  async function getcategories(){
       const data = await categoryService.getCategories()
-      setDataTable(data)
-    
+      setDataTable(data) 
   }
+
   useEffect(()=>{
-    getcate()
-  },[])
+    getcategories()
+  },[dataTable])
+
   function cancel(){
       setSelectedColumn(null)
       setSelectedCategory(null)
       setLabel('')
   }
-  const searching = (search)=>{
-      console.log(search)
-  }
-  const sorting = (sort)=>{
+  function sorting(sort){
       console.log(sort)
   }
   function onPageChange(newPage) {
@@ -81,9 +80,10 @@ export default function GestionCategoriesPage(){
   }
   
   return(
-    <div className='w-full h-full flex flex-col p-5 overflow-y-auto bg-[#f4f1f8]'>
+    <div className='flex flex-col'>
       <UrlPage pages={['Gestion des categories']}/>
-      <div className="border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full mt-10">
+      <AddCategory/>
+      <div className="mt-2 border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full">
         <div className="mr-2 grow">
           <label>Colonne</label>
           <Select
@@ -131,7 +131,7 @@ export default function GestionCategoriesPage(){
           </div>
         }
         <button
-          type="submit"
+          type="button"
           className="submit-btn mr-2"
         >
           Recherche
@@ -144,7 +144,7 @@ export default function GestionCategoriesPage(){
           Annuler
         </button>
       </div> 
-      <div className="border bg-white border-1 overflow-hidden rounded-md flex flex-col mt-5 w-full">
+      <div className="mt-2 border overflow-hidden bg-white border-1 rounded-md flex flex-col w-full">
         <table className="w-full">
           <thead className='bg-[#020617] text-white rounded-t-md'>
             <tr>
@@ -174,13 +174,13 @@ export default function GestionCategoriesPage(){
               </tr>
             }
             {!loading &&
-              dataTable.map(item=>
-                  <tr className="border-t" key={item._id}> 
+              dataTable.map(({_id,category,label})=>
+                  <tr className="border-t" key={_id}> 
                     <td  className="p-3 text-slate-800">   
-                      {item.category}
+                      {category}
                     </td>
                     <td className="p-3 text-slate-800">
-                    {item.label.map(elmnt=>
+                    {label.map(elmnt=>
                         <div key={elmnt}>
                             {elmnt} 
                         </div>)}
