@@ -1,10 +1,9 @@
 function setErrors(error) {
   let errors = {}
-
   if (error?.response?.data?.errors) {
       error.response.data.errors.forEach(value => {
-          let array = value.split(',')
-          errors[array[0]] = array[1]
+        let name = value.path
+        errors[name] = value.msg
       })
 
       return errors

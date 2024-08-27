@@ -4,8 +4,8 @@ import validateData from '../../helpers/validateForm'
 import {string,array,object} from 'yup'
 
 let categorySchema = object({
-  category: string().label('category').required(),
-  label: array().label('label').of(string()).min(1).required('Ce champ est obligatoire')
+  category: string().label('category').required('La categorie est requise'),
+  label: array().label('label').of(string()).min(1, 'L\'étiquette doit contenir au moins un élément')
 })
 export default {
   async getCategories() {
@@ -15,7 +15,6 @@ export default {
       return data
 
     }catch(error){
-      console.log(error) 
       return []
     }
   },
