@@ -5,12 +5,13 @@ import LoadingSpinner from '../components/common/LoadingSpinner'
 import PageSize from '../components/common/TableSize'
 import PaginationBar from '../components/common/PaginationComponent'
 import { UrlPage } from '../components/common/UrlPage'
-import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import category from '../json/category.json'
 import categoryService from '../service/category/category.service'
 import AddCategory from '../components/pages/category/AddCategory'
 import DeleteCategory from '../components/pages/category/DeleteCategory'
+import EditCategory from '../components/pages/category/EditCategory'
 
 export default function GestionCategoriesPage(){
 
@@ -188,9 +189,7 @@ export default function GestionCategoriesPage(){
                     </td>
                     
                     <td className="p-3">
-                      <button type="button" className=" mr-2 rounded-sm">   
-                        <FontAwesomeIcon icon={faPenToSquare} className="w-6 mr-2 text-[#4B5563]" />
-                      </button>
+                      <EditCategory item={{categoryId:_id,category:category,label:label}} />
                       <DeleteCategory categoryId={_id} category={category}/>
                     </td>
                   </tr>)

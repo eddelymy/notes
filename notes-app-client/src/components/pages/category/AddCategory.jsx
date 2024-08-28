@@ -16,6 +16,7 @@ export default function AddCategory(){
 
   function close(){
     setShow(false)
+    cancel()
   }
   async function submit(){
     setErr({})
@@ -51,6 +52,7 @@ export default function AddCategory(){
   }
   function cancel(){
     setCategory('')
+    setErr({})
     setLabels(new Set([]))
   }
   return(
@@ -103,7 +105,7 @@ export default function AddCategory(){
           </div>
           <div className='flex mt-6 float-end'>
             <button className="cancel-btn mr-3" type='button' onClick={cancel}>Annuler</button>
-            <button className="submit-btn" type='button' onClick={submit}>Ajouter</button>
+            <button className="submit-btn" type='button' onClick={submit}>Enregistrer</button>
           </div>
         </form>
       </ModalComponent>}

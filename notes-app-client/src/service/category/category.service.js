@@ -24,5 +24,8 @@ export default {
   },
   async deleteCategory(categoryId){
     return await axios().delete(`${routes.category.delete.url}${categoryId}`)
+  },
+  async editCategory(categoryId,newCategory){
+    return await axios().put(`${routes.category.edit.url}${categoryId}`,newCategory)
   }
 }

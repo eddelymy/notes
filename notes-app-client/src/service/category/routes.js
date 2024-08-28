@@ -14,6 +14,11 @@ export default {
       name:'category.delete',
       method:'DELETE',
       url:'/category/'
+    },
+    edit:{
+      name:'category.edit',
+      method:'PUT',
+      url:'/category/'
     }
     
   }
