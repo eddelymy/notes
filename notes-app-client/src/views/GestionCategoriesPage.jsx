@@ -34,10 +34,10 @@ export default function GestionCategoriesPage(){
           }
       },
       {
-          id: 'tag',
+          id: 'label',
           columnName: 'Etiquette',
           showSearchBar: true,
-          showSort: true,
+          showSort: false,
           filter: {
           key: 'label',
           operator: 'LIKE',
@@ -50,20 +50,34 @@ export default function GestionCategoriesPage(){
   const [selectedColumn,setSelectedColumn] = useState(null)
   const [selectedCategory,setSelectedCategory] = useState(null)
   const [label,setLabel] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(2)
+  const [totalPages,setTotalPages] = useState(0)
+  const [totalItems,setTotalItems] = useState(0)
+  const [sortBy, setSortBy] = useState('category')
+  const [order, setOrder] = useState('asc')
+  const [search, setSearch] = useState('')
   const loading = false
   let size = 10
-  let currentPage = 0
-  let totalPages = 1
-  let totalItems = 1
 
-  async function getcategories(){
-      const data = await categoryService.getCategories()
-      setDataTable(data) 
-  }
+  // async function getcategories(){
+  //     const data = await categoryService.getCategories()
+  //     setDataTable(data) 
+  // }
+  async function pagination(page, limit, sortBy, order, search){
+    try {
+        const response = await categoryService.pagination(page, limit, sortBy, order, search)
+        setDataTable(response.data.categories)
+        setTotalPages(response.data.pages)
+        setTotalItems(response.data.total)
+    } catch (error) {
+        console.error("Erreur lors de la récupération des catégories :", error)
+    }
+}
 
   useEffect(()=>{
-    getcategories()
-  },[dataTable])
+    pagination(page, limit, sortBy, order, search)
+  },[page, limit, sortBy, order, search])
 
   function cancel(){
       setSelectedColumn(null)
@@ -71,20 +85,20 @@ export default function GestionCategoriesPage(){
       setLabel('')
   }
   function sorting(sort){
-      console.log(sort)
+    setSortBy(sort.key)
+    setOrder(sort.direction)
   }
   function onPageChange(newPage) {
-      currentPage = newPage
+    setPage(newPage)
   }
   function selectSize(newSize) {
-      console.log(newSize)
-      size = newSize
+      setLimit(newSize)
   }
   
   return(
     <div className='flex flex-col'>
       <UrlPage pages={['Gestion des categories']}/>
-      <AddCategory/>
+      <AddCategory catgoryAdded={()=>{pagination(page, limit, sortBy, order, search)}}/>
       <div className="mt-2 border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full">
         <div className="mr-2 grow">
           <label>Colonne</label>
@@ -189,18 +203,18 @@ export default function GestionCategoriesPage(){
                     </td>
                     
                     <td className="p-3">
-                      <EditCategory item={{categoryId:_id,category:category,label:label}} />
-                      <DeleteCategory categoryId={_id} category={category}/>
+                      <EditCategory item={{categoryId:_id,category:category,label:label}} categoryUpdated={()=>{pagination(page, limit, sortBy, order, search)}} />
+                      <DeleteCategory categoryId={_id} category={category} categoryDeleted={()=>{pagination(page, limit, sortBy, order, search)}}/>
                     </td>
                   </tr>)
             }   
           </tbody>
         </table>
         <div className="flex justify-between p-2 border-t">
-          <PageSize size={size} sizeSelected={selectSize} />
+          <PageSize size={limit} sizeSelected={selectSize} />
           <PaginationBar
-            maxVisibleButtons={5}
-            currentPage={currentPage}
+            maxVisibleButtons={4}
+            currentPage={page}
             totalPages={totalPages}
             totalItems={totalItems}
             pageChanged={onPageChange}

@@ -27,5 +27,10 @@ export default {
   },
   async editCategory(categoryId,newCategory){
     return await axios().put(`${routes.category.edit.url}${categoryId}`,newCategory)
+  },
+  async pagination(page, limit, sortBy, order, search){
+    return await axios().get(routes.category.pagination.url,{
+      params: { page, limit, sortBy, order, search }
+  })
   }
 }

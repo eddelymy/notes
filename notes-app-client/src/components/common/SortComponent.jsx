@@ -1,30 +1,26 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faSort } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 
 function SortComponent(props){
 
-    const sorts = {
-        key: props.item.id,
-        direction: 'ASC'
-      }
+    const [sorts, setSorts] = useState({
+      key: props.item.id,
+      direction: 'asc'
+    }) 
     function sortDirection(){
-        if (sorts.direction === 'ASC') {
-          return 'DESC'
-        }
-      
-        if (sorts.direction === 'DESC') {
-          return 'ASC'
-        }
-      
-        return 'DESC'
-      }
+      return sorts.direction === 'asc' ? 'desc' : 'asc'
+    }
 
     function sortItem() {
-        if (props.item.showSort){
-            console.log(sorts.direction)
-            sorts.direction = sortDirection()
-            props.sorting(sorts)
-        }
+      const newDirection = sortDirection()
+      if (props.item.showSort){
+        setSorts((prev) => ({
+          ...prev,
+          direction:newDirection}))
+          props.sorting({ ...sorts, direction: newDirection })
+      }
+      
     }
 
     return(

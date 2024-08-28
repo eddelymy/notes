@@ -8,13 +8,19 @@ function PaginationComponent(props){
         props.pageChanged(page)
     }
     function startPageFunction(){
-        if (props.currentPage === 0 || props.currentPage === 1) {
+        if(props.currentPage === 1){
             return 1
         }
-        if (props.currentPage === props.totalPages) {
-            return props.totalPages - props.maxVisibleButtons
+        if(props.maxVisibleButtons > props.totalPages){
+            return 1
         }
-        return props.currentPage - 1
+        if(props.currentPage > props.maxVisibleButtons ){
+            return  props.totalPages - props.maxVisibleButtons +1
+        }
+        if (props.currentPage === props.totalPages && props.totalPages > props.maxVisibleButtons ) {
+            return props.totalPages - props.maxVisibleButtons + 1
+        }
+        return props.currentPage - 1 
     }
     function isActive(page) {
         return page === props.currentPage
@@ -26,10 +32,10 @@ function PaginationComponent(props){
         props.pageChanged(props.currentPage - 1)
     }
     function firstPage() {
-        props.pageChanged(0)
+        props.pageChanged(1)
     }
     function lastPage() {
-        props.pageChanged(props.totalPages - 1)
+        props.pageChanged(props.totalPages)
     }
     function page(){
         const range = []
@@ -48,7 +54,7 @@ function PaginationComponent(props){
         ) {
             range.push({
                 name: i,
-                isDisabled: i === props.currentPage + 1
+                isDisabled: i === props.currentPage
             })
         }
         return range
@@ -61,9 +67,9 @@ function PaginationComponent(props){
                 <li>
                     <button
                         type="button"
-                        className="btn-pagination py-1 px-3"
+                        className="btn-pagination rounded-full py-1 px-3"
                         aria-label="First"
-                        disabled={props.currentPage === 0}
+                        disabled={props.currentPage === 1}
                         onClick={firstPage}
                     >
                         <span className="text-xl">&laquo;</span>
@@ -72,9 +78,9 @@ function PaginationComponent(props){
                 <li>
                     <button
                         type="button"
-                        className="btn-pagination py-1 px-3"
+                        className="btn-pagination rounded-full py-1 px-3"
                         aria-label="Previous"
-                        disabled={props.currentPage === 0}
+                        disabled={props.currentPage === 1}
                         onClick={previousPage}
                     >
                         <span className="text-xl">&lsaquo;</span>
@@ -84,9 +90,9 @@ function PaginationComponent(props){
                     <li key={page.name}>
                         <button
                             type="button"
-                            className={"btn-pagination py-1 px-3 rounded-full mx-1 text-gray-500 " + ( isActive(page.name - 1) ? "active" : null)}
+                            className={"btn-pagination py-1 px-3 rounded-full mx-1 text-gray-500 " + ( isActive(page.name ) ? "active" : null)}
                             disabled={page.isDisabled}
-                            onClick={selectPage(page.name - 1)}
+                            onClick={()=>selectPage(page.name)}
                         >
                             <span >
                                 {page.name }
@@ -97,9 +103,9 @@ function PaginationComponent(props){
                 <li>
                     <button
                         type="button"
-                        className="btn-pagination py-1 px-3"
+                        className="btn-pagination rounded-full py-1 px-3"
                         aria-label="Next"
-                        disabled={props.currentPage + 1 === props.totalPages}
+                        disabled={props.currentPage  === props.totalPages}
                         onClick={nextPage}
                     >
                         <span className="text-xl">&rsaquo;</span>
@@ -108,9 +114,9 @@ function PaginationComponent(props){
                 <li>
                     <button
                         type="button"
-                        className="btn-pagination text-zinc-500 py-1 px-3"
+                        className="btn-pagination rounded-full text-zinc-500 py-1 px-3"
                         aria-label="last"
-                        disabled={props.currentPage + 1 === props.totalPages}
+                        disabled={props.currentPage === props.totalPages}
                         onClick={lastPage}
                     >
                         <span className="text-xl">&raquo;</span>

@@ -3,7 +3,7 @@ export default {
     index: {
       name: 'category.index',
       method: 'GET',
-      url: 'categories'
+      url: 'all/categories'
     },
     create:{
       name:'category.create',
@@ -19,6 +19,11 @@ export default {
       name:'category.edit',
       method:'PUT',
       url:'/category/'
+    },
+    pagination:{
+      name:'category.paginatio',
+      method:'GET',
+      url:'categories'
     }
     
   }

@@ -6,7 +6,7 @@ import categoryService from '../../../service/category/category.service'
 import { setErrors } from '../../../helpers/error'
 import { useState } from 'react'
 
-export default function AddCategory(){
+export default function AddCategory({catgoryAdded}){
 
   const [show,setShow] = useState(false)
   const [category,setCategory] = useState('')
@@ -23,6 +23,7 @@ export default function AddCategory(){
     try{
       const response = await categoryService.addCategory({category:category,label:[...labels]})
       console.log(response)
+      catgoryAdded()
       cancel()
       close()
     }catch(error){

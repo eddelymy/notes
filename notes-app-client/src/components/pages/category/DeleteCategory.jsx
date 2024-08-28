@@ -2,12 +2,13 @@ import {  faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import categoryService from '../../../service/category/category.service'
 
-export default function DeleteCategory({categoryId, category}){
+export default function DeleteCategory({categoryId, category, categoryDeleted}){
 
   async function deleteCategory(){
     if(confirm(`Voulez-vous supprimer la categorie : ${category}?`)){
       try{
         const response = await categoryService.deleteCategory(categoryId)
+        categoryDeleted()
         console.log(response)
       }catch(error){
         console.log(error)

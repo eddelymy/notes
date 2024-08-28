@@ -5,7 +5,7 @@ import categoryService from '../../../service/category/category.service'
 import { setErrors } from '../../../helpers/error'
 import { useState } from 'react'
 
-export default function EditCategory({item}){
+export default function EditCategory({item, categoryUpdated}){
 
   const [show,setShow] = useState(false)
   const [category,setCategory] = useState(''),
@@ -48,6 +48,7 @@ export default function EditCategory({item}){
     try{
       const response = await categoryService.editCategory(item.categoryId,{category:category,label:[...labels]})
       console.log(response)
+      categoryUpdated()
       closeModal()
     }catch(error){
       setErr(setErrors(error))

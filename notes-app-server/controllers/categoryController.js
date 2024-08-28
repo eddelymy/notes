@@ -9,6 +9,32 @@ exports.getAllCategories = async (req, res) => {
   }
 }
 
+exports.pagination = async (req, res) => {
+  const { page = 1, limit = 10, sortBy = 'category', order = 'asc', search = '' } = req.query;
+  const skip = (page - 1) * limit;
+  const sortOrder = order === 'desc' ? -1 : 1;
+
+  try {
+    const categories = await CategoryModel.find({ category: { $regex: search, $options: 'i' } })
+      .skip(skip)
+      .limit(Number(limit))
+      .sort({ [sortBy]: sortOrder });
+
+    const totalCategories = await CategoryModel.countDocuments({
+      category: { $regex: search, $options: 'i' }
+    });
+
+    res.json({
+      total: totalCategories,
+      pages: Math.ceil(totalCategories / limit),
+      categories
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération des catégories' });
+  }
+};
+
+
 exports.createCategory = async (req, res) => {
   const newCategory = new CategoryModel(req.body)
   try {
@@ -30,22 +56,6 @@ exports.deleteCategory = async(req, res) => {
     res.status(500).json({ message: 'Erreur lors de la suppression de la catégorie' })
   }
 }
-
-// exports.editCategory = async (req, res) => {
-//   try {
-//     const categoryId = req.params.id
-//     const updatedData = req.body
-
-//     const updatedCategory = await CategoryModel.findByIdAndUpdate(categoryId, {
-//       category: updatedData.category,
-//       label: updatedData.label
-//     }, { new: true })
-
-//     res.status(200).json({ message: 'Catégorie modifiée avec succès', category: updatedCategory })
-//   } catch (error) {
-//     res.status(500).json({ message: 'Erreur lors de la modification de la catégorie' })
-//   }
-// };
 exports.editCategory = async (req, res) => {
   const categoryId = req.params.id
   const updatedData = req.body

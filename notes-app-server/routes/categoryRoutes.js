@@ -4,10 +4,11 @@ const { validateCreateCategory } = require('../middlewares/validateCreateCategor
 const { validateEditCategory } = require('../middlewares/validateEditCategory')
 const categoryController = require('../controllers/categoryController')
 
-router.get('/categories', categoryController.getAllCategories)
+router.get('/all/categories', categoryController.getAllCategories)
 router.post('/category/new', validateCreateCategory, categoryController.createCategory)
 router.delete('/category/:id', categoryController.deleteCategory)
 router.put('/category/:id', validateEditCategory, categoryController.editCategory)
+router.get('/categories',categoryController.pagination)
 
 
 module.exports = router
