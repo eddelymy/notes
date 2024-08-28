@@ -20,3 +20,14 @@ exports.createCategory = async (req, res) => {
   }
 }
 
+exports.deleteCategory = async(req, res) => {
+  try {
+    const categoryId = req.params.id
+    await CategoryModel.findByIdAndDelete(categoryId)
+
+    res.status(200).json({ message: 'Catégorie supprimée avec succès' })
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la suppression de la catégorie' })
+  }
+}
+

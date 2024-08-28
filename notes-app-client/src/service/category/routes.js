@@ -9,6 +9,11 @@ export default {
       name:'category.create',
       method:'POST',
       url:'/category/new'
+    },
+    delete:{
+      name:'category.delete',
+      method:'DELETE',
+      url:'/category/'
     }
     
   }

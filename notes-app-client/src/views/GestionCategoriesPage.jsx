@@ -5,11 +5,12 @@ import LoadingSpinner from '../components/common/LoadingSpinner'
 import PageSize from '../components/common/TableSize'
 import PaginationBar from '../components/common/PaginationComponent'
 import { UrlPage } from '../components/common/UrlPage'
-import { faCopy, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import category from '../json/category.json'
 import categoryService from '../service/category/category.service'
 import AddCategory from '../components/pages/category/AddCategory'
+import DeleteCategory from '../components/pages/category/DeleteCategory'
 
 export default function GestionCategoriesPage(){
 
@@ -187,15 +188,10 @@ export default function GestionCategoriesPage(){
                     </td>
                     
                     <td className="p-3">
-                      <button type="button" className="  mr-2 rounded-sm">   
+                      <button type="button" className=" mr-2 rounded-sm">   
                         <FontAwesomeIcon icon={faPenToSquare} className="w-6 mr-2 text-[#4B5563]" />
                       </button>
-                      <button type="button" className="  mr-2 rounded-sm">
-                        <FontAwesomeIcon icon={faCopy} className=" w-6 mr-2 text-[#4B5563]" />
-                      </button>
-                      <button type="button" className="  rounded-sm">
-                        <FontAwesomeIcon icon={faTrash} className=" w-6 mr-2 text-[#EF5944]" />
-                      </button>
+                      <DeleteCategory categoryId={_id} category={category}/>
                     </td>
                   </tr>)
             }   

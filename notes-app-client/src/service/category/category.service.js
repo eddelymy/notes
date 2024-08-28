@@ -21,5 +21,8 @@ export default {
   async addCategory(category){
     await validateData(categorySchema,category)
     return await axios().post(routes.category.create.url, category)
+  },
+  async deleteCategory(categoryId){
+    return await axios().delete(`${routes.category.delete.url}${categoryId}`)
   }
 }
