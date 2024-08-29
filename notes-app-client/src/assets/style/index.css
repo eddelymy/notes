@@ -78,6 +78,9 @@ a.active {
   .cancel-btn{
     @apply h-9 self-end rounded-md border-2 border-[#020617] px-3 py-1 bg-[#020617] text-white hover:bg-[#374151] hover:border-[#374151]
   }
+  .disabled-btn{
+    @apply h-9 self-end rounded-md border-2 border-[#fb7185] bg-[#fb7185] px-3 text-white
+  }
   .input_text{
     @apply px-3 mt-1 h-9 w-full rounded-md border border-[#e4e4e7] focus:outline-none focus:ring-0 focus:border-slate-300
   }

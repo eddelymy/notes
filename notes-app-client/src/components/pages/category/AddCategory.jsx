@@ -22,7 +22,6 @@ export default function AddCategory({catgoryAdded}){
     setErr({})
     try{
       const response = await categoryService.addCategory({category:category,label:[...labels]})
-      console.log(response)
       catgoryAdded()
       cancel()
       close()

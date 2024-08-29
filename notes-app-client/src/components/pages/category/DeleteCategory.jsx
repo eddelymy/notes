@@ -9,7 +9,6 @@ export default function DeleteCategory({categoryId, category, categoryDeleted}){
       try{
         const response = await categoryService.deleteCategory(categoryId)
         categoryDeleted()
-        console.log(response)
       }catch(error){
         console.log(error)
       } 

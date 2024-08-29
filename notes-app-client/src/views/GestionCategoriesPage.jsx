@@ -5,9 +5,6 @@ import LoadingSpinner from '../components/common/LoadingSpinner'
 import PageSize from '../components/common/TableSize'
 import PaginationBar from '../components/common/PaginationComponent'
 import { UrlPage } from '../components/common/UrlPage'
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import category from '../json/category.json'
 import categoryService from '../service/category/category.service'
 import AddCategory from '../components/pages/category/AddCategory'
 import DeleteCategory from '../components/pages/category/DeleteCategory'
@@ -16,34 +13,19 @@ import EditCategory from '../components/pages/category/EditCategory'
 export default function GestionCategoriesPage(){
 
   const ColumnsList = [
-      {value: 1, label: 'Categorie'},
-      {value: 2, label: 'Etiquette'}
+      {value: 'category', label: 'Categorie'},
+      {value: 'label', label: 'Etiquette'}
   ]
-  const categoriesList = category
   const tableHead = [
       {
           id: 'category',
           columnName: 'Categorie',
-          showSearchBar: true,
           showSort: true,
-          filter: {
-          key: 'id',
-          operator: 'EQUAL',
-          field_type: 'STRING',
-          value: ''
-          }
       },
       {
           id: 'label',
           columnName: 'Etiquette',
-          showSearchBar: true,
           showSort: false,
-          filter: {
-          key: 'label',
-          operator: 'LIKE',
-          field_type: 'STRING',
-          value: ''
-          }
       }
   ]
   const [dataTable,setDataTable] = useState([])
@@ -56,14 +38,10 @@ export default function GestionCategoriesPage(){
   const [totalItems,setTotalItems] = useState(0)
   const [sortBy, setSortBy] = useState('category')
   const [order, setOrder] = useState('asc')
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState({})
+  const [categoriesList,setCategoriesList] = useState([{value:'',label:''}])
   const loading = false
-  let size = 10
 
-  // async function getcategories(){
-  //     const data = await categoryService.getCategories()
-  //     setDataTable(data) 
-  // }
   async function pagination(page, limit, sortBy, order, search){
     try {
         const response = await categoryService.pagination(page, limit, sortBy, order, search)
@@ -79,10 +57,28 @@ export default function GestionCategoriesPage(){
     pagination(page, limit, sortBy, order, search)
   },[page, limit, sortBy, order, search])
 
+  async function getCategories() {
+    setCategoriesList([])
+    try {
+      const data = await categoryService.getCategories()
+      data.forEach((item) => 
+        setCategoriesList((prev) => [...prev, { value: item._id, label: item.category }])
+      )
+    } catch (error) {
+      console.error('Erreur lors de la récupération des catégories:', error)
+    }
+  }
+  function columnSelected(e){
+    setSelectedColumn(e) 
+    if(e?.label==='Categorie'){
+      getCategories() 
+    }
+  }
   function cancel(){
       setSelectedColumn(null)
       setSelectedCategory(null)
       setLabel('')
+      setSearch({})
   }
   function sorting(sort){
     setSortBy(sort.key)
@@ -93,6 +89,14 @@ export default function GestionCategoriesPage(){
   }
   function selectSize(newSize) {
       setLimit(newSize)
+  }
+  function searching(){
+    if(selectedCategory){
+      setSearch({key:selectedColumn?.value,value:selectedCategory?.label})
+    }
+    if(label){
+      setSearch({key:selectedColumn?.value,value:label})
+    }
   }
   
   return(
@@ -113,7 +117,8 @@ export default function GestionCategoriesPage(){
             options={ColumnsList}
             value={selectedColumn}
             onChange={(e)=>{
-                setSelectedColumn(e)  
+              columnSelected(e) 
+              e === null && setSearch({})
             }}
             aria-expanded ={true}
             placeholder={<div>Select option</div>}
@@ -136,6 +141,7 @@ export default function GestionCategoriesPage(){
               placeholder={<div>Select option</div>}
               onChange={(e)=>{
                 setSelectedCategory(e)
+                e === null && setSearch({})
               }} 
             />
           </div>
@@ -143,12 +149,16 @@ export default function GestionCategoriesPage(){
         {(selectedColumn?.label==='Etiquette') &&  
           <div className="mr-2 grow">
             <label>Etiquette</label>
-            <input value={label} type='text' className='input_text' onChange={(e)=>setLabel(e.target.value)}/>
+            <input value={label} type='text' className='input_text' onChange={(e)=>{setLabel(e.target.value)
+              e.nativeEvent.inputType === 'deleteContentBackward' && setSearch({})
+            }}/>
           </div>
         }
         <button
           type="button"
-          className="submit-btn mr-2"
+          className={ selectedColumn === null || (selectedColumn.value === 'category' && selectedCategory === null) || (selectedColumn.value === 'label' && label === '') ? "disabled-btn mr-2" : "submit-btn mr-2"}
+          onClick={searching}
+          disabled={selectedColumn === null || (selectedColumn.value === 'category' && selectedCategory === null) || (selectedColumn.value === 'label' && label === '')}
         >
           Recherche
         </button>

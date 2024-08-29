@@ -2,7 +2,7 @@ import { useState } from "react"
 
 function TableSize(props){
 
-    const sizesList = [5, 10, 50, 100, 150]
+    const sizesList = [2,5, 10, 50, 100, 150]
     const [selectedSize,setSelectedSize] = useState(props.size)
 
     return(

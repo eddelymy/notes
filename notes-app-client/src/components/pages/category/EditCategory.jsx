@@ -43,11 +43,9 @@ export default function EditCategory({item, categoryUpdated}){
     })
   }
   async function submit(){
-    console.log({category:category,label:[...labels]})
     setErr({})
     try{
       const response = await categoryService.editCategory(item.categoryId,{category:category,label:[...labels]})
-      console.log(response)
       categoryUpdated()
       closeModal()
     }catch(error){
