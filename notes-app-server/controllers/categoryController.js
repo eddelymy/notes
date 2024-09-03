@@ -9,31 +9,6 @@ exports.getAllCategories = async (req, res) => {
   }
 }
 
-// exports.pagination = async (req, res) => {
-//   const { page = 1, limit = 10, sortBy = 'category', order = 'asc', search = '' } = req.query;
-//   const skip = (page - 1) * limit;
-//   const sortOrder = order === 'desc' ? -1 : 1;
-
-//   try {
-//     const categories = await CategoryModel.find({ category: { $regex: search, $options: 'i' } })
-//       .skip(skip)
-//       .limit(Number(limit))
-//       .sort({ [sortBy]: sortOrder });
-
-//     const totalCategories = await CategoryModel.countDocuments({
-//       category: { $regex: search, $options: 'i' }
-//     });
-
-//     res.json({
-//       total: totalCategories,
-//       pages: Math.ceil(totalCategories / limit),
-//       categories
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Erreur lors de la récupération des catégories' });
-//   }
-// };
-
 exports.pagination = async (req, res) => {
   const { page = 1, limit = 10, sortBy = 'category', order = 'asc', search = {} } = req.query;
   const skip = (page - 1) * limit;

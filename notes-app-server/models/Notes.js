@@ -1,10 +1,20 @@
-const mongoose = require("mongoose")
+const {Schema,model} = require("mongoose")
 
-const NoteSchema = new mongoose.Schema({
-
+const noteSchema = new Schema({
+  category:{
+    type:Object,
+  },
+  label:{
+    type:Array,
+  },
+  title:{
+    type:String,
+  },
+  content:{
+    type:String,
+  }
 })
 
-const NoteModel = mongoose.model("notes", NoteSchema)
+const NoteModel = model("notes", noteSchema)
 
-//Export model
 module.exports = NoteModel

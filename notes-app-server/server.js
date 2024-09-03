@@ -25,23 +25,10 @@ mongoose.connection.on("error", (err) => {
 //Import routes
 
 const categoryRoutes = require('./routes/categoryRoutes')
-app.use('/',categoryRoutes)
+const noteRoutes = require('./routes/noteRoutes')
 
-//Import category model
-// const CategoryModel = require('./models/Categories')
+app.use('/',categoryRoutes, noteRoutes)
 
-// app.get("/categories", async(req,res)=>{
-//     const categories = await CategoryModel.find(); 
-//     res.json(categories);
-  
-// })
-
-// app.post("/category/new", async(req,res)=>{
-//   const newCategory = new CategoryModel(req.body)
-//   await newCategory.save()
-//   res.json(req.body)
-  
-// })
 app.listen(_PORT,()=>{
   console.log('server works !')
 })

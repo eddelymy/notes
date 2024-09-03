@@ -35,8 +35,8 @@
 
 :root{
   --pink: #e11d48;
-  --lightGray:#e8e8e8
-}
+  /* #EDFF08 #9A6AFF #BBBAE9 #FF83CD #e8e8e8*/
+  --lightGray: #e4e4e7  }
 
 * {
   box-sizing: border-box;
@@ -84,14 +84,29 @@ a.active {
   .input_text{
     @apply px-3 mt-1 h-9 w-full rounded-md border border-[#e4e4e7] focus:outline-none focus:ring-0 focus:border-slate-300
   }
+  .textarea{
+    @apply  py-2 px-3 mt-1 w-full rounded-md border border-[#e4e4e7] focus:outline-none focus:ring-0 focus:border-slate-300
+  }
+  .btn-icon{
+    @apply rounded-md py-1 px-[6px] text-black hover:bg-[#f1f5f9] hover:border-[#f1f5f9] 
+  }
   
 }
 
  /* Select input   */
+ .css-b62m3t-container{
+  margin-top: 0.25rem ;
+ }
   .css-13cymwt-control {
     border-radius: 0.375rem !important;
-    border: 1px solid var(--lightGray)!important;
-    height:32px !important;
+    /* border: 1px solid var(--lightGray)!important; */
+    border: 1px solid #e4e4e7 !important; 
+    outline: none !important;
+    /* height:32px !important; */
+  }
+  .css-t3ipsp-control:focus{
+    border-color: slategray !important;
+    box-shadow: none !important;
   }
   .css-tr4s17-option{
     background-color: #27272a !important;
@@ -102,16 +117,28 @@ a.active {
     color:white !important;
   }
   .css-t3ipsp-control{
-    border-color :var(--lightGray) !important;
-    box-shadow: 0 0 0 1px var(--lightGray) !important;
+    border: 1px solid #e4e4e7 !important; 
+    /* border-color :var(--lightGray) !important; */
+    box-shadow: none!important;
   }
   .css-t3ipsp-control:hover{
     border-color :var(--lightGray) !important;
   }
+  .css-1jqq78o-placeholder{
+    font-size: 12px !important;
+    font-family: 'Poppins', sans-serif !important;
+    color : #9ca3af !important
+  }
+  .css-1xc3v61-indicatorContainer{
+    color:#9ca3af !important
+  }
+  .css-1xc3v61-indicatorContainer:hover{
+    color:black !important
+  }
 
    /* MultiSelect  */
 
-  .css-13cymwt-control {
+  /* .css-13cymwt-control {
     border-radius: 0.375rem !important;
     border: 1px solid var(--lightGray) !important;
     height:32px !important;
@@ -134,7 +161,7 @@ a.active {
   background-color: #27272a !important;
   color:white !important;
   border-radius: 0.375rem !important
-}
+} */
 
  /* multiSelectInput */
 
@@ -165,3 +192,4 @@ color:white !important;
 background-color: #020617 !important;
 color:white !important;
 } */
+

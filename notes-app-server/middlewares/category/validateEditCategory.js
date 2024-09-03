@@ -1,5 +1,5 @@
 const { checkSchema, validationResult } = require('express-validator');
-const CategoryModel = require('../models/Categories');
+const CategoryModel = require('../../models/Categories');
 exports.validateEditCategory = [
   checkSchema({
     category: {
