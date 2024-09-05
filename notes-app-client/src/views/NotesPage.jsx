@@ -46,7 +46,7 @@ export default function NotesPage() {
         <div className="scrollbar-custom w-full grid grid-cols-1 gap-4 2xl:grid  2xl:gap-5 p-6 2xl:grid-cols-3  place-items-center">
           {
             notes.map((note) =>(
-              <NoteComponent key={note._id} {...note}/>
+              <NoteComponent key={note._id} {...note} getNotes={ ()=>pagination(page, limit, search)}/>
             ))
           }
         </div>

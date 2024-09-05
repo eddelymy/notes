@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react"
+import DeleteNote from "./DeleteNote"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 
-const NoteComponent = ({ _id,category,label, title, content }) => {
+const NoteComponent = ({ _id,category,label, title, content, getNotes }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [showExpandButton, setShowExpandButton] = useState(false)
   const contentRef = useRef(null)
@@ -48,9 +49,7 @@ const NoteComponent = ({ _id,category,label, title, content }) => {
       </div>
       
       <div className="border-t border-t-white flex justify-between pt-4 mt-6">
-        <button type="button" className="rounded-full text-white text-[12px] bg-[#020617] px-2 py-1">
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
+        <DeleteNote noteId={_id} noteDeleted={getNotes}/>
         <button type="button" className="rounded-full text-white text-[12px] bg-[#020617] px-2 py-1">
           <FontAwesomeIcon icon={faEdit} />
         </button>

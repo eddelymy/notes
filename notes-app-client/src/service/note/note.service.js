@@ -19,6 +19,10 @@ export default {
     await validateData(noteSchema,note)
     return await axios().post(routes.note.create.url, note)
   },
+  async deleteNote(noteId){
+    return await axios().delete(`${routes.note.delete.url}${noteId}`)
+  }
+  ,
   async pagination(page, limit, search){
     return await axios().get(routes.note.pagination.url,{
       params: { page, limit, search }

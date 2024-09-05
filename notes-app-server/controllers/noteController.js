@@ -41,4 +41,14 @@ exports.createNote = async (req, res) => {
     console.log(error)
     res.status(500).json({ message: 'Erreur lors de la création de la Note' })
   }
+};
+exports.deleteNote = async(req, res) => {
+  try {
+    const noteId = req.params.id
+    await NoteModel.findByIdAndDelete(noteId)
+
+    res.status(200).json({ message: 'Note supprimée avec succès' })
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la suppression de la note' })
+  }
 }
