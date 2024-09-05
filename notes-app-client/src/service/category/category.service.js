@@ -5,6 +5,10 @@ import {string,array,object} from 'yup'
 
 let categorySchema = object({
   category: string().label('category').required('La categorie est requise'),
+  color: string()
+    .label('color')
+    .matches(/^#([0-9A-F]{3}){1,2}$/i, 'La couleur doit être un code hexadécimal valide commençant par #')
+    .required('La couleur est obligatoire'),
   label: array().label('label').of(string()).min(1, 'L\'étiquette doit contenir au moins un élément')
 })
 export default {

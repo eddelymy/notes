@@ -4,6 +4,9 @@ const categorySchema = new Schema({
   category:{
     type:String,
   },
+  color:{
+    type:String,
+  },
   label:{
     type:Array,
   }

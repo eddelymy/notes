@@ -10,6 +10,7 @@ export default function AddCategory({catgoryAdded}){
 
   const [show,setShow] = useState(false)
   const [category,setCategory] = useState('')
+  const [color,setColor] = useState('')
   const [label,setLabel] = useState('')
   const [labels,setLabels] = useState(new Set([]))
   const [errors,setErr] = useState({})
@@ -21,7 +22,7 @@ export default function AddCategory({catgoryAdded}){
   async function submit(){
     setErr({})
     try{
-      const response = await categoryService.addCategory({category:category,label:[...labels]})
+      const response = await categoryService.addCategory({category:category,color:color,label:[...labels]})
       catgoryAdded()
       cancel()
       close()
@@ -52,6 +53,7 @@ export default function AddCategory({catgoryAdded}){
   }
   function cancel(){
     setCategory('')
+    setColor('')
     setErr({})
     setLabels(new Set([]))
   }
@@ -75,6 +77,20 @@ export default function AddCategory({catgoryAdded}){
               />
             {errors.category && <div id="farmError" className="text-red-700">
               { errors.category }
+            </div>}
+          </div>
+          <div className="flex flex-col mt-4">
+            <label>
+              Couleur
+            </label>
+            <input 
+              name="color"
+              className="input_text"
+              value={color}
+              onChange={(e)=>{setColor(e.target.value)}}
+              />
+            {errors.color && <div id="colorError" className="text-red-700">
+              { errors.color }
             </div>}
           </div>
           <div className="flex flex-col mt-4">

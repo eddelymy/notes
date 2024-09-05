@@ -3,6 +3,8 @@ const router = express.Router()
 const { validateCreateNote } = require('../middlewares/note/validateCreateNote')
 const noteController = require('../controllers/noteController')
 
+router.get('/notes',noteController.pagination)
+// router.get('/all/notes', noteController.getAllNotes)
 router.post('/note/new', validateCreateNote, noteController.createNote)
 
 

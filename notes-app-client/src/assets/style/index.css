@@ -92,6 +92,20 @@ a.active {
   }
   
 }
+.textarea ul {
+  list-style-type: disc;
+  padding-left: 12px;
+}
+
+.textarea ol {
+  list-style-type: decimal; 
+  padding-left: 12px; 
+}
+
+.textarea li {
+  margin-bottom: 5px; 
+}
+
 
  /* Select input   */
  .css-b62m3t-container{

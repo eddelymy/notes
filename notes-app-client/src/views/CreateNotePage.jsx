@@ -5,7 +5,7 @@ import { UrlPage } from "../components/common/UrlPage"
 import noteService from '../service/note/note.service'
 import { setErrors } from '../helpers/error'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBold, faFileImport, faFont, faItalic, faLink, faUnderline } from '@fortawesome/free-solid-svg-icons'
+import { faBold, faFileImport, faFont, faItalic, faLink, faListOl, faListUl, faUnderline } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
 import { useState, useEffect, useRef } from 'react'
 
@@ -28,8 +28,8 @@ export default function CreateNotePage() {
     try {
       const data = await categoryService.getCategories()
       data.forEach((item) => {
-        setCategoriesList((prev) => [...prev, { value: item._id, label: item.category }])
-        setLabels((prev) => [...prev, { value: item._id, label: [...item.label] }])
+        setCategoriesList((prev) => [...prev, { value: item.color, label: item.category }])
+        setLabels((prev) => [...prev, { value: item.category, label: [...item.label] }])
       });
     } catch (error) {
       console.error('Erreur lors de la récupération des catégories:', error)
@@ -147,13 +147,10 @@ export default function CreateNotePage() {
     }
   }
   
-  
-  
-
   return (
     <div className='flex flex-col'>
       <UrlPage pages={['Creation des notes']} />
-      <div className="mt-5 width=full border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full">
+      <div className="mt-5 width-full border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full">
         <form className="w-full">
           <div className="flex flex-row">
             <label className="w-full">
@@ -171,9 +168,10 @@ export default function CreateNotePage() {
                 aria-expanded={true}
                 placeholder={<div>Select option</div>}
                 onChange={(e) => {
-                  setSelectedCategory(e);
-                  const result = labels.filter(item => item.value === e.value);
-                  result[0].label.map(item => {
+                  setFiltredLabel([])
+                  setSelectedCategory(e)
+                  const result = labels.filter(item => item.value === e?.label);
+                  result[0]?.label?.map(item => {
                     setFiltredLabel(prevFiltredLabel => [...prevFiltredLabel, { value: item, label: item }]);
                   });
                 }}
@@ -235,6 +233,12 @@ export default function CreateNotePage() {
             </button>
             <button type="button" className='mr-2 btn-icon' onClick={() => formatText('underline')}>
               <FontAwesomeIcon icon={faUnderline} />
+            </button>
+            <button type="button" className='mr-2 btn-icon' onClick={() => formatText('insertUnorderedList')}>
+              <FontAwesomeIcon icon={faListUl} />
+            </button>
+            <button type="button" className='mr-2 btn-icon' onClick={() => formatText('insertOrderedList')}>
+              <FontAwesomeIcon icon={faListOl} />
             </button>
             <ReactColor colorSelected={myColor} />
             <button type="button" className='mr-2 btn-icon'>

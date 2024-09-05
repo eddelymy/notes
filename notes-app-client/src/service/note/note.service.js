@@ -19,4 +19,9 @@ export default {
     await validateData(noteSchema,note)
     return await axios().post(routes.note.create.url, note)
   },
+  async pagination(page, limit, search){
+    return await axios().get(routes.note.pagination.url,{
+      params: { page, limit, search }
+  })
+  }
 }

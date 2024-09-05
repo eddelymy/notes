@@ -22,6 +22,24 @@ exports.validateCreateCategory = [
         },
       },
     },
+    color: {
+      exists: {
+        errorMessage: 'La couleur est requise',
+      },
+      isEmpty: {
+        negated: true,
+        errorMessage: 'La couleur ne doit pas être vide',
+      },
+      custom: {
+        options: async (value) => {
+          const existingColor = await CategoryModel.findOne({ color: value });
+          if (existingColor) {
+            throw new Error('Cette couleur existe déjà');
+          }
+          return true;
+        },
+      },
+    },
     label: {
       isArray: {
         errorMessage: 'L\'étiquette doit être un tableau',
