@@ -32,9 +32,8 @@ export default function ReactColor({colorSelected}){
         {isDropDownOpen && 
           <div className="absolute bg-white border rounded-lg p-2 left-4 top-10 z-10 flex flex-col">
             <HexColorPicker color={color} onChange={(newColor) => {
-              // setColor(newColor)
-              // console.log(newColor)
               colorSelected(newColor)
+              setColor(newColor)
             }} />
           </div>}
       </div>

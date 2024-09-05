@@ -43,7 +43,7 @@ export default function NotesPage() {
     <div className='flex flex-col'>
       <UrlPage pages={['Gestion des notes']} />
       <div className="mt-5 border overflow-hidden bg-white border-1 rounded-md flex flex-col w-full">
-        <div className="scrollbar-custom w-full grid grid-cols-1 gap-4 2xl:grid  2xl:gap-5 p-6 2xl:grid-cols-3">
+        <div className="scrollbar-custom w-full grid grid-cols-1 gap-4 2xl:grid  2xl:gap-5 p-6 2xl:grid-cols-3  place-items-center">
           {
             notes.map((note) =>(
               <NoteComponent key={note._id} {...note}/>
