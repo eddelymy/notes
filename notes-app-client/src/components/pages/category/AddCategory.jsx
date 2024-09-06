@@ -58,7 +58,7 @@ export default function AddCategory({catgoryAdded}){
     setLabels(new Set([]))
   }
   return(
-    <div className="mt-10 w-full">
+    <div className="mt-8 w-full">
       <button type="button" className="cancel-btn float-end" onClick={()=>setShow(true)}>
         <FontAwesomeIcon icon={faPlus} className='mr-2' />
         Nouveau

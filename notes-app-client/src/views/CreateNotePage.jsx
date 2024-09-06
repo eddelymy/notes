@@ -150,7 +150,7 @@ export default function CreateNotePage() {
   return (
     <div className='flex flex-col'>
       <UrlPage pages={['Creation des notes']} />
-      <div className="mt-5 width-full border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full">
+      <div className="mt-10 width-full border border-1 bg-white rounded-md flex items-center max-w-full p-5 w-full">
         <form className="w-full">
           <div className="flex flex-row">
             <label className="w-full">
