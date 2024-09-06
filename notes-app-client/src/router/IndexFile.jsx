@@ -9,6 +9,7 @@ import ParametragePage from '../views/ParametragePage'
 import NotesPage from "../views/NotesPage"
 import GestionCategoriesPage from "../views/GestionCategoriesPage"
 import CreateNotePage from "../views/CreateNotePage"
+import EditNote from "../components/pages/note/EditNote"
 
 export default function Index(){
 
@@ -19,6 +20,7 @@ export default function Index(){
       <Route path="/" element={<GlobalComponent />}>
         <Route index element={<AuthRequired><Home/></AuthRequired>}/>
         <Route path="notes" element={<AuthRequired><NotesPage/></AuthRequired>}/>
+        <Route path="edit_note/:id" element={<AuthRequired><EditNote/></AuthRequired>}/>
         <Route path="creer_note" element={<AuthRequired><CreateNotePage/></AuthRequired>}/>
         <Route path="gestion_categories" element={<AuthRequired><GestionCategoriesPage/></AuthRequired>}/>
         <Route path="parametrages" element={<AuthRequired><ParametragePage/></AuthRequired>}/>

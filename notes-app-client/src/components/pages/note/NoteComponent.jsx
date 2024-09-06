@@ -2,11 +2,14 @@ import { useState, useEffect, useRef } from "react"
 import DeleteNote from "./DeleteNote"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { Navigate, useNavigate } from "react-router-dom"
 
 const NoteComponent = ({ _id,category,label, title, content, getNotes }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [showExpandButton, setShowExpandButton] = useState(false)
   const contentRef = useRef(null)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (contentRef.current) {
@@ -14,6 +17,10 @@ const NoteComponent = ({ _id,category,label, title, content, getNotes }) => {
       setShowExpandButton(contentHeight > 250)
     }
   }, [content])
+
+  function editNote(id){
+    navigate(`/edit_note/${id}`)
+  }
 
   return (
     <div className="flex flex-col rounded-2xl px-4 border-2 py-6 w-full h-full max-w-[800px] min-w-[300px] hover:-translate-y-1 hover:scale-10 duration-300" style={{ background: category.value }}>
@@ -50,9 +57,10 @@ const NoteComponent = ({ _id,category,label, title, content, getNotes }) => {
       
       <div className="border-t border-t-white flex justify-between pt-4 mt-6">
         <DeleteNote noteId={_id} noteDeleted={getNotes}/>
-        <button type="button" className="rounded-full text-white text-[12px] bg-[#020617] px-2 py-1">
+        <button type="button" onClick={()=>editNote(_id)} className="rounded-full text-white text-[12px] bg-[#020617] px-2 py-1">
           <FontAwesomeIcon icon={faEdit} />
         </button>
+        {/* <EditNote note={ {_id,category,label, title, content, getNotes} } noteUpdated={getNotes} /> */}
       </div>
     </div>
   );

@@ -21,8 +21,14 @@ export default {
   },
   async deleteNote(noteId){
     return await axios().delete(`${routes.note.delete.url}${noteId}`)
-  }
-  ,
+  },
+  async editNote(noteId,note){
+    await validateData(noteSchema,note)
+    return await axios().put(`${routes.note.edit.url}${noteId}`,note)
+  },
+  async finNoteById(noteId){
+    return await axios().get(`${routes.note.find.url}${noteId}`)
+  },
   async pagination(page, limit, search){
     return await axios().get(routes.note.pagination.url,{
       params: { page, limit, search }

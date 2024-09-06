@@ -51,4 +51,44 @@ exports.deleteNote = async(req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la suppression de la note' })
   }
+};
+exports.getNoteById = async (req, res) => {
+  try {
+    const noteId = req.params.id
+    console.log(noteId ,'noteId')
+
+    const note = await NoteModel.findById(noteId)
+
+    if (!note) {
+      return res.status(404).json({ message: 'Note non trouvée' })
+    }
+
+    res.status(200).json(note)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Erreur lors de la récupération de la note' })
+  }
+};
+
+exports.editNote = async (req, res) => {
+  const noteId = req.params.id
+  const updatedData = req.body
+
+  try {
+    const existingNote = await NoteModel.findById(noteId)
+    if (!existingNote) {
+      return res.status(404).json({ message: 'Note non trouvée' })
+    }
+
+    existingNote.category = updatedData.category
+    existingNote.label = updatedData.label
+    existingNote.title = updatedData.title
+    existingNote.content = updatedData.content
+
+    await existingNote.save()
+
+    res.status(200).json({ message: 'Note mise à jour avec succès', note: existingNote })
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la mise à jour de la note' })
+  }
 }

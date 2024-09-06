@@ -10,10 +10,20 @@ export default {
       method:'POST',
       url:'/note/new'
     },
+    edit:{
+      name:'note.edit',
+      method:'PUT',
+      url:'/note/'
+    },
     delete:{
       name:'note.delete',
       method:'DELETE',
       url:'/note/'
+    },
+    find:{
+      name:'note.find',
+      method:'GET',
+      url:'/id/'
     },
     edit:{
       name:'note.edit',
