@@ -25,6 +25,21 @@ export default {
       method:'GET',
       url:'/id/'
     },
+    findRecentNotes:{
+      name:'note.findRecentNotes',
+      method:'GET',
+      url:'/recentNotes'
+    },
+    findToDoTasks:{
+      name:'note.findToDoTasks',
+      method:'GET',
+      url:'/toDoTasks'
+    },
+    categoryOccurrences:{
+      name:'note.categoryOccurrences',
+      method:'GET',
+      url:'/category/occurrence'
+    },
     edit:{
       name:'note.edit',
       method:'PUT',

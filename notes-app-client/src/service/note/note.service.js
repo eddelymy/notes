@@ -29,6 +29,15 @@ export default {
   async finNoteById(noteId){
     return await axios().get(`${routes.note.find.url}${noteId}`)
   },
+  async getRecentNotes(){
+    return await axios().get(routes.note.findRecentNotes.url)
+  },
+  async getToDoTasks(){
+    return await axios().get(routes.note.findToDoTasks.url)
+  },
+  async getCategoryOccurrences(){
+    return await axios().get(routes.note.categoryOccurrences.url)
+  },
   async pagination(page, limit, search){
     return await axios().get(routes.note.pagination.url,{
       params: { page, limit, search }

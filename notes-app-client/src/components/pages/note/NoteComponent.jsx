@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { Navigate, useNavigate } from "react-router-dom"
 
-const NoteComponent = ({ _id,category,label, title, content, getNotes }) => {
+const NoteComponent = ({ _id,category,label, title, content, getNotes ,statut=true }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [showExpandButton, setShowExpandButton] = useState(false)
   const contentRef = useRef(null)
@@ -55,13 +55,12 @@ const NoteComponent = ({ _id,category,label, title, content, getNotes }) => {
         )}
       </div>
       
-      <div className="border-t border-t-white flex justify-between pt-4 mt-6">
+      {statut && <div className="border-t border-t-white flex justify-between pt-4 mt-6">
         <DeleteNote noteId={_id} noteDeleted={getNotes}/>
         <button type="button" onClick={()=>editNote(_id)} className="rounded-full text-white text-[12px] bg-[#020617] px-2 py-1">
           <FontAwesomeIcon icon={faEdit} />
         </button>
-        {/* <EditNote note={ {_id,category,label, title, content, getNotes} } noteUpdated={getNotes} /> */}
-      </div>
+      </div>}
     </div>
   );
 };

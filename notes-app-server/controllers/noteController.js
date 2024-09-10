@@ -28,7 +28,7 @@ exports.pagination = async (req, res) => {
         query[searchObject.key] = { $regex: searchObject.value, $options: 'i' };
     }
   }
-  
+
   try {
     const notes = await NoteModel.find(query)
       .skip(skip)
@@ -82,7 +82,6 @@ exports.getNoteById = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la récupération de la note' })
   }
 };
-
 exports.editNote = async (req, res) => {
   const noteId = req.params.id
   const updatedData = req.body
@@ -103,5 +102,48 @@ exports.editNote = async (req, res) => {
     res.status(200).json({ message: 'Note mise à jour avec succès', note: existingNote })
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la mise à jour de la note' })
+  }
+}
+exports.getRecentNotes = async (req, res) => {
+  try{
+    const recentNotes = await NoteModel.find().sort({ createdAt: -1 }).limit(3)
+    res.json(recentNotes)
+  }catch(error){
+    res.status(500).json({ message: 'Erreur lors de la récupération des notes' })
+  }
+}
+exports.getToDoTasks = async (req,res) =>{
+  const { limit = 3 } = req.query
+  try{
+    const tags = ['Tâches à Faire', 'Réunions', 'Rappels Médicaux']
+    const toDoTasks = await NoteModel.find({
+      label: {
+        $elemMatch: { label: { $in: tags } }
+      }
+    }).limit(limit)
+    console.log(toDoTasks)
+    res.json(toDoTasks)
+  }catch(error){
+    res.status(500).json({ message: 'Erreur lors de la récupération des notes' })
+  }
+}
+exports.getCategoryOccurrences = async (req, res) => {
+  try {
+    
+    const categories = await NoteModel.aggregate([
+      {
+        $group: {
+          _id: "$category", 
+          count: { $sum: 1 } 
+        }
+      },
+      { $sort: { count: -1 } } 
+    ]);
+
+    res.status(200).json(categories)
+    console.log(categories)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur lors de la récupération des catégories' })
   }
 }
