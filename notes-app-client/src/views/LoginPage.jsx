@@ -1,15 +1,22 @@
 import { useNavigate,useLocation } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faBook,faBookOpen} from '@fortawesome/free-solid-svg-icons'
-import { auth, provider, signInWithPopup } from '../firebase'
+import {faBookOpen} from '@fortawesome/free-solid-svg-icons'
+// import { auth, provider, signInWithPopup } from '../firebase'
+import userService from "../service/user/user.service"
+import ErrorAlert from "../components/common/ErrorAlert"
+import { setErrors } from "../helpers/error"
+import { useState } from "react"
 
 export default function Login(){
 
   const navigate = useNavigate()
   const location = useLocation()
   const redirectPath = location.state?.path || '/'
+  const [errors,setErr] = useState({})
+  const [error,setError] = useState('')
+  const [showErrorAlert, setShowErrorAlert] = useState(false)
 
-  const submit = (e)=>{
+  const submit = async (e)=>{
     e.preventDefault()
     const form = e.target
 
@@ -17,24 +24,29 @@ export default function Login(){
 
     const username = formData.get('username')
     const password = formData.get('password')
-
-    console.log({username:username,password:password})
-    
-    localStorage.setItem('user', {username:username,password:password})
-    form.reset()
-    navigate(redirectPath)
-    
+    try{
+      const response = await userService.login({username:username,password:password})
+      localStorage.setItem('tkn_notes', response.data.token)
+      form.reset()
+      navigate(redirectPath)
+    }catch(error){
+      setErr(setErrors(error))
+      if(error?.response?.data?.message){
+        setError(error.response.data.message)
+        setShowErrorAlert(true)
+      }
+    }
   }
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        localStorage.setItem('user', JSON.stringify(result.user));
-        navigate(redirectPath);
-      })
-      .catch((error) => {
-        console.error("Erreur de connexion avec Google:", error);
-      });
-  };
+  // const signInWithGoogle = () => {
+  //   signInWithPopup(auth, provider)
+  //     .then((result) => {
+  //       localStorage.setItem('user', JSON.stringify(result.user));
+  //       navigate(redirectPath);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur de connexion avec Google:", error);
+  //     });
+  // };
 
   return(
     <div className="login flex items-center justify-center">
@@ -49,13 +61,19 @@ export default function Login(){
           </span>
         </div>
         <form onSubmit={submit} className="mt-10">
+        {showErrorAlert &&
+          <ErrorAlert error={error} closeAlert={()=>{setShowErrorAlert(false)}}/>}
           <div className="flex flex-col">
             <label>
-              Email
+              Utilisateur
             </label>
             <input 
               name="username"
+              type="text"
               className="px-3 bg-white bg-opacity-20 mt-1 rounded-md h-8 focus:outline-none focus:border-white focus:ring-1 focus:ring-white"/>
+              {errors.username && <div id="farmError" className="text-red-600">
+              { errors.username }
+            </div>}
           </div>
           <div className="flex flex-col mt-4">
             <label>
@@ -63,10 +81,14 @@ export default function Login(){
             </label>
             <input 
               name="password"
+              type="password"
               className="px-3 bg-white bg-opacity-20 mt-1 rounded-md h-8 focus:outline-none focus:border-white focus:ring-1 focus:ring-white"/>
+              {errors.password && <div id="farmError" className="text-red-600">
+              { errors.password }
+            </div>}
           </div>
-          <button className="mt-6 h-8 bg-[#e11d48] w-full rounded-md">Se connecter</button>
-          <div className="flex mt-8">
+          <button className="mt-6 h-8 bg-[#e11d48] w-full rounded-md mb-5">Se connecter</button>
+          {/* <div className="flex mt-8">
             <hr className="w-full mt-3"/>
             <span className="mx-3">Ou</span>
             <hr className="w-full mt-3"/>
@@ -76,7 +98,7 @@ export default function Login(){
             onClick={signInWithGoogle}
             className="mt-4 h-8 bg-white bg-opacity-20 w-full rounded-md">
             Se connecter avec Google
-          </button>
+          </button> */}
         </form>
       </div>
       

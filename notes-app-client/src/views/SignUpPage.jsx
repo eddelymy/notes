@@ -1,25 +1,40 @@
 import { useNavigate } from "react-router-dom"
+import userService from "../service/user/user.service"
+import ErrorAlert from "../components/common/ErrorAlert"
+import { setErrors } from "../helpers/error"
+import { useState } from "react"
 
 export default function SignUpPage(){
 
   const navigate = useNavigate()
+  const [errors,setErr] = useState({})
+  const [error,setError] = useState('')
+  const [showErrorAlert, setShowErrorAlert] = useState(false)
 
-  const submit = (e)=>{
+  const submit = async (e)=>{
     e.preventDefault()
     const form = e.target
 
     const formData = new FormData(form)
 
-    const fullName = formData.get('fullName')
+    const email = formData.get('email')
     const username = formData.get('username')
     const password = formData.get('password')
     const passwordConfirm = formData.get('passwordConfirm')
 
-    console.log({username:username,password:password})
-    
-    localStorage.setItem('user', {username:username,password:password})
-    form.reset()
-    navigate('/login')
+    try{
+        const response = await userService.signUp({username:username,email:email,password:password,passwordConfirm:passwordConfirm})
+        localStorage.setItem('tkn_notes', response.data.token)        
+        form.reset()
+        navigate('/')
+      
+    }catch(error){
+      setErr(setErrors(error))
+      if(error?.response?.data?.message){
+        setError(error.response.data.message)
+        setShowErrorAlert(true)
+      }
+    }
     
   }
 
@@ -30,21 +45,31 @@ export default function SignUpPage(){
           <span className="text-2xl">Inscription</span>
         </div>
         <form onSubmit={submit} className="mt-10">
+        {showErrorAlert &&
+          <ErrorAlert error={error} closeAlert={()=>{setShowErrorAlert(false)}}/>}
         <div className="flex flex-col">
             <label>
-              Nom et Prenom
+              Utilisateur
             </label>
             <input 
-              name="fullName"
+              name="username"
+              type="text"
               className="px-3 bg-white bg-opacity-20 mt-1 rounded-md h-8 focus:outline-none focus:border-white focus:ring-1 focus:ring-white"/>
+              {errors.username && <div id="farmError" className="text-red-600">
+              { errors.username }
+            </div>}
           </div>
           <div className="flex flex-col mt-4">
             <label>
               Email
             </label>
             <input 
-              name="username"
+              name="email"
+              type="email"
               className="px-3 bg-white bg-opacity-20 mt-1 rounded-md h-8 focus:outline-none focus:border-white focus:ring-1 focus:ring-white"/>
+              {errors.email && <div id="farmError" className="text-red-600">
+              { errors.email }
+            </div>}
           </div>
           <div className="flex flex-col mt-4">
             <label>
@@ -52,7 +77,11 @@ export default function SignUpPage(){
             </label>
             <input 
               name="password"
+              type="password"
               className="px-3 bg-white bg-opacity-20 mt-1 rounded-md h-8 focus:outline-none focus:border-white focus:ring-1 focus:ring-white"/>
+              {errors.password && <div id="farmError" className="text-red-600">
+              { errors.password }
+            </div>}
           </div>
           <div className="flex flex-col mt-4">
             <label>
@@ -60,7 +89,11 @@ export default function SignUpPage(){
             </label>
             <input 
               name="passwordConfirm"
+              type="password"
               className="px-3 bg-white bg-opacity-20 mt-1 rounded-md h-8 focus:outline-none focus:border-white focus:ring-1 focus:ring-white"/>
+              {errors.passwordConfirm && <div id="farmError" className="text-red-600">
+              { errors.passwordConfirm }
+            </div>}
           </div>
           <button className="mt-6 h-8 bg-[#e11d48] w-full rounded-md">S'inscrire</button>
         </form>

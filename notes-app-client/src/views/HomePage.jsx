@@ -1,7 +1,6 @@
 import { UrlPage } from "../components/common/UrlPage"
 import noteService from "../service/note/note.service"
 import NoteComponent from "../components/pages/note/NoteComponent"
-import TableSize from '../components/common/TableSize'
 import { BarChart,Cell, Label, Tooltip, ResponsiveContainer, Bar, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
@@ -24,7 +23,6 @@ export default function HomePage(){
     try{
       const response = await noteService.getCategoryOccurrences()
       setCategoryOccurrences(response.data)
-      console.log(response.data)
     }catch(error){
       console.log(error)
     }
@@ -73,18 +71,6 @@ export default function HomePage(){
             Tous les notes
           </NavLink>
         </div>
-        {/* <div className="flex items-center mt-4">
-          <span className="font-bold text-[14px] mr-3">Rappels ou Tâches à Faire</span>
-          <TableSize size={3} sizeSelected={getToDoTasks}/>
-        </div> */}
-        {/* {toDoTasks.length === 0 && <div className=" w-full pt-8 flex justify-center">No data to show.</div>} */}
-        {/* <div className="scrollbar-custom w-full grid grid-cols-1 gap-4 2xl:grid  2xl:gap-5 mt-4 2xl:grid-cols-3  place-items-center">
-          {
-            toDoTasks.map((note) =>(
-              <NoteComponent key={note._id} {...note} statut={false}/>
-            ))
-          }
-        </div> */}
       </div>
     </div>
   )

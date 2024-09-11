@@ -26,8 +26,9 @@ mongoose.connection.on("error", (err) => {
 
 const categoryRoutes = require('./routes/categoryRoutes')
 const noteRoutes = require('./routes/noteRoutes')
+const userRoutes = require('./routes/userRoutes')
 
-app.use('/',categoryRoutes, noteRoutes)
+app.use('/',categoryRoutes, noteRoutes, userRoutes)
 
 app.listen(_PORT,()=>{
   console.log('server works !')

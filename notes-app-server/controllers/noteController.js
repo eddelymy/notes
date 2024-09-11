@@ -51,7 +51,6 @@ exports.createNote = async (req, res) => {
     await newNote.save()
     res.status(200).json({ message: 'Note créée avec succès', note: newNote })
   } catch (error) {
-    console.log(error)
     res.status(500).json({ message: 'Erreur lors de la création de la Note' })
   }
 };
@@ -68,7 +67,6 @@ exports.deleteNote = async(req, res) => {
 exports.getNoteById = async (req, res) => {
   try {
     const noteId = req.params.id
-    console.log(noteId ,'noteId')
 
     const note = await NoteModel.findById(noteId)
 
@@ -121,7 +119,6 @@ exports.getToDoTasks = async (req,res) =>{
         $elemMatch: { label: { $in: tags } }
       }
     }).limit(limit)
-    console.log(toDoTasks)
     res.json(toDoTasks)
   }catch(error){
     res.status(500).json({ message: 'Erreur lors de la récupération des notes' })
@@ -141,7 +138,6 @@ exports.getCategoryOccurrences = async (req, res) => {
     ]);
 
     res.status(200).json(categories)
-    console.log(categories)
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur lors de la récupération des catégories' })

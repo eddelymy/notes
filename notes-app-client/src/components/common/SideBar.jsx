@@ -7,7 +7,8 @@ export default function SideBar(){
 
   const navigate = useNavigate()
 
-  const logOut = ()=>{
+  function logOut(){
+    localStorage.removeItem('tkn_notes')
     navigate('/login')
   }
 
@@ -32,7 +33,7 @@ export default function SideBar(){
                     </div>
                 </div>
                 <div className="h-10 my-4 flex items-center font-semibold px-6 hover:text-[#e11d48] hover:border-r-2 hover:border-r-[#e11d48] ">
-                    <button type="button" onClick={logOut}>
+                    <button type="button" onClick={()=>logOut()}>
                         <span className="flex items-center w-full">
                             <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-sm" />
                             <span className="ml-3">Se deconnecter</span>

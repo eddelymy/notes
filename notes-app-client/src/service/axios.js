@@ -11,7 +11,7 @@ export default () => {
       const token = localStorage.getItem('tkn_notes')
 
       if (token) {
-        config.headers['Authorization'] = 'Bearer ' + token
+        config.headers['Authorization'] = `Bearer ${token}`
       }
 
       return config
