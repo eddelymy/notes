@@ -87,7 +87,8 @@ export default function Login(){
               { errors.password }
             </div>}
           </div>
-          <button className="mt-6 h-8 bg-[#e11d48] w-full rounded-md mb-5">Se connecter</button>
+          <button className="mt-6 h-8 bg-[#e11d48] w-full rounded-md mb-1">Se connecter</button>
+          <a href="/forgot_password" className=" mb-5 text-[11px] float-end text-blue-200">Mot de passe oublié ?</a>
           {/* <div className="flex mt-8">
             <hr className="w-full mt-3"/>
             <span className="mx-3">Ou</span>

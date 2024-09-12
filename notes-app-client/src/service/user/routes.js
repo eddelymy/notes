@@ -9,6 +9,11 @@ export default {
       name:'user.login',
       method:'POST',
       url:'/login'
+    },
+    resetPassword:{
+      name:'user.resetPassword',
+      method:'POST',
+      url:'/reset-password'
     }
   }
 }

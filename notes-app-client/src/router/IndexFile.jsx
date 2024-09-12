@@ -10,6 +10,8 @@ import NotesPage from "../views/NotesPage"
 import GestionCategoriesPage from "../views/GestionCategoriesPage"
 import CreateNotePage from "../views/CreateNotePage"
 import EditNote from "../components/pages/note/EditNote"
+import ForgetPassword from "../views/ForgetPassword";
+import ResetPassword from "../views/ResetPassword";
 
 export default function Index(){
 
@@ -17,6 +19,8 @@ export default function Index(){
     <Routes>
       <Route path='/login' element={<LoginPage/>}/>
       <Route path='/inscription' element={<SignUpPage/>}/>
+      <Route path="/forgot_password" element={<ForgetPassword/>} />
+      <Route path="/reset_password" element={<ResetPassword/>} />
       <Route path="/" element={<GlobalComponent />}>
         <Route index element={<AuthRequired><Home/></AuthRequired>}/>
         <Route path="notes" element={<AuthRequired><NotesPage/></AuthRequired>}/>

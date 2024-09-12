@@ -28,6 +28,7 @@ export default () => {
     },
 
     async (error) => {
+      console.log(error)
       if (error?.response?.status === 401) {
         localStorage.removeItem('tkn_notes')
         // await router.push('/login')
