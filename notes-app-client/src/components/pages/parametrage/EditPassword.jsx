@@ -1,17 +1,33 @@
-import { useState } from "react"
-import ModalComponent from "../../common/ModalComponent"
+import { useState, useEffect } from "react"
+import ModalComponent from "../../common/ModalComponent" 
+import { setErrors } from "../../../helpers/error"
+import userService from "../../../service/user/user.service"
 
 export default function EditPassword({closeIt}){
 
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [errors, setErr] = useState({})
+  const [id,setId] = useState('')
 
-  function submit(){
-    console.log(password)
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user_notes'))
+    setId(user.userId) 
+  }, [JSON.parse(localStorage.getItem('user_notes'))])
+
+  async function submit(){
+    try{
+      const response = await userService.editPassword(currentPassword,newPassword,id)
+      localStorage.setItem('user_notes', JSON.stringify(response.data.user)) 
+      closeModal()
+    }catch(error){
+      console.log(error)
+      setErr(setErrors(error))
+    }
   }
   function cancel(){
-    setPassword('')
-    setConfirmPassword('')
+    setCurrentPassword('')
+    setNewPassword('')
   }
   function closeModal(){
     cancel()
@@ -22,33 +38,33 @@ export default function EditPassword({closeIt}){
       <form className="mt-10">
         <div className="flex flex-col">
           <label>
-            Noveau mot de passe
+            Mot de passe actuel
           </label>
           <input 
             name="password"
             type="password"
             className="input_text"
-            value={password}
-            onChange={(e)=>{setPassword(e.target.value)}}
+            value={currentPassword}
+            onChange={(e)=>{setCurrentPassword(e.target.value)}}
             />
-          {/* {errors.password && <div id="farmError" className="text-red-700">
-            { errors.password }
-          </div>} */}
+          {errors.currentPassword && <div id="currentPasswordError" className="text-red-700">
+            { errors.currentPassword }
+          </div>}
         </div>
         <div className="flex flex-col mt-4">
           <label>
-            Confirmer mot de passe
+            Noveau mot de passe
           </label>
           <input 
-            name="confirmPassword"
+            name="newPassword"
             className="input_text"
             type="password"
-            value={confirmPassword}
-            onChange={(e)=>{setConfirmPassword(e.target.value)}}
+            value={newPassword}
+            onChange={(e)=>{setNewPassword(e.target.value)}}
             />
-          {/* {errors.confirmPassword && <div id="farmError" className="text-red-700">
-            { errors.confirmPassword }
-          </div>} */}
+          {errors.newPassword && <div id="newPasswordErr" className="text-red-700">
+            { errors.newPassword }
+          </div>}
         </div>
         <div className='flex mt-6 float-end'>
           <button className="cancel-btn mr-3" type='button' onClick={cancel}>Annuler</button>

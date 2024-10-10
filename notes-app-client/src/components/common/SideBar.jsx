@@ -15,7 +15,8 @@ export default function SideBar(){
   }
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('user_notes'))) 
+    const user = JSON.parse(localStorage.getItem('user_notes'))
+    setUser(user) 
   }, [])
 
   return( 

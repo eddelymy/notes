@@ -1,12 +1,28 @@
 import ModalComponent from "../../common/ModalComponent"
-import { useState } from "react"
+import userService from "../../../service/user/user.service"
+import { setErrors } from "../../../helpers/error"
+import { useState, useEffect } from "react"
 
 export default function EditUsername({closeIt}){
 
   const [username, setUsername] = useState('')
+  const [errors, setErr] = useState({})
+  const [id,setId] = useState('')
 
-  function submit(){
-    console.log(username)
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user_notes'))
+    setId(user.userId) 
+  }, [JSON.parse(localStorage.getItem('user_notes'))])
+
+  async function submit(){
+    try{
+      const response = await userService.editUsername(username,id)
+      localStorage.setItem('user_notes', JSON.stringify(response.data.user)) 
+      closeModal()
+    }catch(error){
+      console.log(error)
+      setErr(setErrors(error))
+    }
   }
   function cancel(){
     setUsername('')
@@ -28,9 +44,9 @@ export default function EditUsername({closeIt}){
             value={username}
             onChange={(e)=>{setUsername(e.target.value)}}
             />
-          {/* {errors.username && <div id="farmError" className="text-red-700">
+          {errors.username && <div id="farmError" className="text-red-700">
             { errors.username }
-          </div>} */}
+          </div>}
         </div>
         <div className='flex mt-6 float-end'>
           <button className="cancel-btn mr-3" type='button' onClick={cancel}>Annuler</button>

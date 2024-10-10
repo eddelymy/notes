@@ -14,6 +14,21 @@ export default {
       name:'user.resetPassword',
       method:'POST',
       url:'/reset-password'
+    },
+    editPassword:{
+      name:'user.editPassword',
+      method:'PUT',
+      url:'/edit-password'
+    },
+    editMail:{
+      name:'user.editMail',
+      method:'PUT',
+      url:'/edit-mail'
+    },
+    editUsername:{
+      name:'user.editUsername',
+      method:'PUT',
+      url:'/edit-username'
     }
   }
 }

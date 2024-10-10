@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
 }
 
 exports.updatePassword = async (req, res) => {
-  const { userId } = req.user
+  const  userId  = req.params.id
   const { currentPassword, newPassword } = req.body;
 
   try {
@@ -91,18 +91,19 @@ exports.updatePassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-    res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
+    res.status(200).json({ message: 'Mot de passe mis à jour avec succès.',user:{ username: user.username, email: user.email,userId: user._id  } });
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 };
 
 exports.updateEmail = async (req, res) => {
-  const { userId } = req.user;
-  const { newEmail } = req.body;
+  const  userId  = req.params.id;
+  const {email}  = req.body;
+  console.log(email)
 
   try {
-    const existingUser = await UserModel.findOne({ email: newEmail });
+    const existingUser = await UserModel.findOne({ email: email });
     if (existingUser) {
       return res.status(400).json({ message: 'Cet e-mail est déjà utilisé.' });
     }
@@ -112,21 +113,21 @@ exports.updateEmail = async (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    user.email = newEmail;
+    user.email = email;
     await user.save();
 
-    res.status(200).json({ message: 'E-mail mis à jour avec succès.' });
+    res.status(200).json({ message: 'E-mail mis à jour avec succès.' ,user:{ username: user.username, email: user.email,userId: user._id  }});
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 };
 
 exports.updateUsername = async (req, res) => {
-  const { userId } = req.user;
-  const { newUsername } = req.body;
+  const  userId  = req.params.id;
+  const { username } = req.body;
 
   try {
-    const existingUser = await UserModel.findOne({ username: newUsername });
+    const existingUser = await UserModel.findOne({ username: username });
     if (existingUser) {
       return res.status(400).json({ message: 'Ce nom d\'utilisateur est déjà pris.' });
     }
@@ -136,10 +137,10 @@ exports.updateUsername = async (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    user.username = newUsername;
+    user.username = username;
     await user.save();
 
-    res.status(200).json({ message: 'Nom d\'utilisateur mis à jour avec succès.' });
+    res.status(200).json({ message: 'Nom d\'utilisateur mis à jour avec succès.',user:{ username: user.username, email: user.email,userId: user._id  } });
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur.' });
   }

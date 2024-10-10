@@ -16,6 +16,16 @@ let signUpSchema = object({
 let resetPasswordSchema = object({
   email:string().email('Email invalide').label('email').required('L\'email est requis')
 })
+let editPasswordSchema = object({
+  currentPassword: string().label('currentPassword').min(8,'Mot de passe faible').required('Ce champ est requis'),
+  newPassword: string().label('newPassword').min(8,'Mot de passe faible').required('Ce champ est requis'),
+})
+let editMailSchema = object({
+  email:string().email('Email invalide').label('email').required('L\'email est requis')
+})
+let editUsernameSchema = object({
+  username: string().label('username').required('L\'utilisateur est requis'),
+})
 export default{
 
   async login(user){
@@ -29,5 +39,20 @@ export default{
   async sendResetPasswordEmail(email){
     await validateData(resetPasswordSchema,{email})
     return await axios().post(routes.user.resetPassword.url, {email})
+  },
+  async editMail(email,id){
+    await validateData(editMailSchema,{email})
+    return await axios().put(`${routes.user.editMail.url}/${id}`, {email})
   }
+  ,
+  async editPassword(currentPassword, newPassword,id){
+    await validateData(editPasswordSchema,{currentPassword, newPassword})
+    return await axios().put(`${routes.user.editPassword.url}/${id}`, {currentPassword, newPassword})
+  },
+  async editUsername(username,id){
+    await validateData(editUsernameSchema,{username})
+    return await axios().put(`${routes.user.editUsername.url}/${id}`, {username})
+  }
+
+  
 }
