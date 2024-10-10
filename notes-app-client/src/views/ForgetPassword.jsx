@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBookOpen} from '@fortawesome/free-solid-svg-icons'
 import userService from "../service/user/user.service"
 import { setErrors } from "../helpers/error"
+import {flash} from '../plugins/flash'
 
 export default function ForgetPassword(){
 
@@ -15,12 +16,13 @@ export default function ForgetPassword(){
     const formData = new FormData(form)
 
     const email = formData.get('email')
-    console.log(email)
     try{
       const response = await userService.sendResetPasswordEmail(email)
-      console.log(response)
+      flash(response.data.message, 'success')
     }catch(error){
-      console.log(error)
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
       setErr(setErrors(error))
     }
   }

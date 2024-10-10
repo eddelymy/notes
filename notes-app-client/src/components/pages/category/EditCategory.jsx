@@ -4,6 +4,7 @@ import ModalComponent from '../../common/ModalComponent'
 import categoryService from '../../../service/category/category.service'
 import { setErrors } from '../../../helpers/error'
 import { useState } from 'react'
+import {flash} from '../../../plugins/flash'
 
 export default function EditCategory({item, categoryUpdated}){
 
@@ -46,10 +47,14 @@ export default function EditCategory({item, categoryUpdated}){
     setErr({})
     try{
       const response = await categoryService.editCategory(item.categoryId,{category:category,label:[...labels]})
+      flash(response.data.message, 'success')
       categoryUpdated()
       closeModal()
     }catch(error){
-      setErr(setErrors(error))
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
+            setErr(setErrors(error))
     }
     
   }

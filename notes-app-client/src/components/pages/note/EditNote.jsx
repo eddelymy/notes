@@ -9,6 +9,7 @@ import { faBold, faFileImport, faItalic, faLink, faListOl, faListUl, faUnderline
 import Select from 'react-select'
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import {flash} from '../../../plugins/flash'
 
 export default function EditNote() {
 
@@ -37,7 +38,7 @@ export default function EditNote() {
       setSelectedCategory(data.category)
       setSelectLabel(data.label)
     }catch(error){
-      console.log(error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
   async function getCategories() {
@@ -49,7 +50,7 @@ export default function EditNote() {
         setLabels((prev) => [...prev, { value: item.category, label: [...item.label] }])
       });
     } catch (error) {
-      console.error('Erreur lors de la récupération des catégories:', error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
 
@@ -61,10 +62,13 @@ export default function EditNote() {
   async function submit() {
     try{
       const response = await noteService.editNote(id,{category:selectedCategory,label:selectLabel,title:title,content:content})
-      console.log(response)
+      flash(response.data.message, 'success')
       navigate('/notes')
     }catch(error){
       setErr(setErrors(error))
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
     }
   }
 

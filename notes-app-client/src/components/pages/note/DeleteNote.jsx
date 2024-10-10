@@ -1,6 +1,7 @@
 import {  faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import noteService from '../../../service/note/note.service'
+import {flash} from '../../../plugins/flash'
 
 export default function DeleteNote({noteId,noteDeleted}){
 
@@ -8,10 +9,12 @@ export default function DeleteNote({noteId,noteDeleted}){
     if(confirm(`Voulez-vous supprimer la note : ${noteId}?`)){
       try{
         const response = await noteService.deleteNote(noteId)
+        flash(response.data.message, 'success')
         noteDeleted()
       }catch(error){
-        console.log(error)
-      } 
+        if(error?.response?.data?.message){
+          flash(error.response.data.message, 'error')
+        }      } 
     }
   }
 

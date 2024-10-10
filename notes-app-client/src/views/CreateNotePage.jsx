@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBold, faFileImport, faFont, faItalic, faLink, faListOl, faListUl, faUnderline } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
 import { useState, useEffect, useRef } from 'react'
+import {flash} from '../plugins/flash'
 
 export default function CreateNotePage() {
 
@@ -32,7 +33,7 @@ export default function CreateNotePage() {
         setLabels((prev) => [...prev, { value: item.category, label: [...item.label] }])
       });
     } catch (error) {
-      console.error('Erreur lors de la récupération des catégories:', error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
 
@@ -43,8 +44,12 @@ export default function CreateNotePage() {
   async function submit() {
     try{
       const response = await noteService.addNote({category:selectedCategory,label:selectLabel,title:title,content:content})
+      flash(response.data.message, 'success')
       cancel()
     }catch(error){
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
       setErr(setErrors(error))
     }
   }

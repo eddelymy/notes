@@ -5,6 +5,7 @@ import ModalComponent from '../../common/ModalComponent'
 import categoryService from '../../../service/category/category.service'
 import { setErrors } from '../../../helpers/error'
 import { useState } from 'react'
+import {flash} from '../../../plugins/flash'
 
 export default function AddCategory({catgoryAdded}){
 
@@ -23,10 +24,14 @@ export default function AddCategory({catgoryAdded}){
     setErr({})
     try{
       const response = await categoryService.addCategory({category:category,color:color,label:[...labels]})
+      flash(response.data.message, 'success')
       catgoryAdded()
       cancel()
       close()
     }catch(error){
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
       setErr(setErrors(error))
     }
     

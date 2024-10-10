@@ -6,6 +6,7 @@ import NoteComponent from "../components/pages/note/NoteComponent"
 import categoryService from '../service/category/category.service'
 import Select from 'react-select'
 import { useState, useEffect } from "react"
+import {flash} from '../plugins/flash'
 
 export default function NotesPage() {
 
@@ -32,7 +33,7 @@ export default function NotesPage() {
       setTotalItems(response.data.total)
       setTotalPages(response.data.pages)
     } catch (error) {
-      console.error("Erreur lors de la récupération des notes :", error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
 
@@ -56,7 +57,7 @@ export default function NotesPage() {
         setCategoriesList((prev) => [...prev, { value: item.color, label: item.category }])
       )
     } catch (error) {
-      console.error('Erreur lors de la récupération des catégories:', error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
   function columnSelected(e){
@@ -122,7 +123,6 @@ export default function NotesPage() {
               placeholder={<div>Select option</div>}
               onChange={(e)=>{
                 setSelectedCategory(e)
-                console.log(e)
                 e === null && setSearch({})
               }} 
             />

@@ -2,8 +2,14 @@ import ModalComponent from "../../common/ModalComponent"
 import userService from "../../../service/user/user.service"
 import { setErrors } from "../../../helpers/error"
 import { useState,useEffect } from "react"
+import { setUser } from "../../../store/userSlice"
+import { useDispatch } from "react-redux"
+import {flash} from '../../../plugins/flash'
 
 export default function EditEmail({closeIt}){
+
+  const dispatch = useDispatch()
+
   const [email, setEmail] = useState('')
   const [errors, setErr] = useState({})
   const [id,setId] = useState('')
@@ -17,9 +23,14 @@ export default function EditEmail({closeIt}){
     try{
       const response = await userService.editMail(email,id)
       localStorage.setItem('user_notes', JSON.stringify(response.data.user)) 
+      dispatch(setUser(response.data.user))
+      flash(response.data.message, 'success')
       closeModal()
     }catch(error){
-      console.log(error)
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
+      
       setErr(setErrors(error))
     }
   }

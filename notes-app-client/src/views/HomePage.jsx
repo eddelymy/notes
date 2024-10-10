@@ -4,6 +4,7 @@ import NoteComponent from "../components/pages/note/NoteComponent"
 import { BarChart,Cell, Label, Tooltip, ResponsiveContainer, Bar, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
+import {flash} from '../plugins/flash'
 
 export default function HomePage(){
 
@@ -15,7 +16,7 @@ export default function HomePage(){
       const response = await noteService.getRecentNotes()
       setRecentNotes(response.data)
     }catch(error){
-      console.log(error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
 
@@ -24,7 +25,7 @@ export default function HomePage(){
       const response = await noteService.getCategoryOccurrences()
       setCategoryOccurrences(response.data)
     }catch(error){
-      console.log(error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
 

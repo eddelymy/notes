@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import ModalComponent from "../../common/ModalComponent" 
 import { setErrors } from "../../../helpers/error"
 import userService from "../../../service/user/user.service"
+import {flash} from '../../../plugins/flash'
 
 export default function EditPassword({closeIt}){
 
@@ -19,9 +20,12 @@ export default function EditPassword({closeIt}){
     try{
       const response = await userService.editPassword(currentPassword,newPassword,id)
       localStorage.setItem('user_notes', JSON.stringify(response.data.user)) 
+      flash(response.data.message, 'success')
       closeModal()
     }catch(error){
-      console.log(error)
+      if(error?.response?.data?.message){
+        flash(error.response.data.message, 'error')
+      }
       setErr(setErrors(error))
     }
   }

@@ -3,21 +3,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faArrowRightFromBracket,faWrench,faFeather,faList,faBookOpen,faHouse, faCircleUser,faGear} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import {clearUser} from '../../store/userSlice'
 
 export default function SideBar(){
 
   const navigate = useNavigate()
   const [user,setUser] = useState({})
+  const userStore = useSelector((state)=>state.user.user)
+  const dispatch = useDispatch()
 
   function logOut(){
     localStorage.removeItem('tkn_notes')
+    dispatch(clearUser())
     navigate('/login')
   }
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user_notes'))
     setUser(user) 
-  }, [])
+  }, [userStore])
 
   return( 
     <>

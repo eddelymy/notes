@@ -9,6 +9,7 @@ import categoryService from '../service/category/category.service'
 import AddCategory from '../components/pages/category/AddCategory'
 import DeleteCategory from '../components/pages/category/DeleteCategory'
 import EditCategory from '../components/pages/category/EditCategory'
+import {flash} from '../plugins/flash'
 
 export default function GestionCategoriesPage(){
 
@@ -49,7 +50,7 @@ export default function GestionCategoriesPage(){
         setTotalPages(response.data.pages)
         setTotalItems(response.data.total)
     } catch (error) {
-        console.error("Erreur lors de la récupération des catégories :", error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
 }
 
@@ -65,7 +66,7 @@ export default function GestionCategoriesPage(){
         setCategoriesList((prev) => [...prev, { value: item._id, label: item.category }])
       )
     } catch (error) {
-      console.error('Erreur lors de la récupération des catégories:', error)
+      flash(error?.response?.data?.message || error?.message, 'error')
     }
   }
   function columnSelected(e){

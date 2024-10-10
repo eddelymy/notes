@@ -8,7 +8,6 @@ export default function ResetPassword(){
   const [errors,setErr] = useState({})
 
   function submit(){
-    console.log('hello')
     setErr(setErrors(''))
   }
   return(
