@@ -47,7 +47,7 @@ exports.signUp = async (req, res) => {
     await user.save()
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' })
-    res.status(201).json({ token })
+    res.status(201).json({ token,user: { username: username, email: email,userId: user._id  } })
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur' })
   }
@@ -67,8 +67,82 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' })
-    res.status(200).json({ token });
+    res.status(200).json({ token,user: { username: username, email: user.email,userId: user._id  } });
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur' })
   }
 }
+
+exports.updatePassword = async (req, res) => {
+  const { userId } = req.user
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Mot de passe actuel incorrect.' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+exports.updateEmail = async (req, res) => {
+  const { userId } = req.user;
+  const { newEmail } = req.body;
+
+  try {
+    const existingUser = await UserModel.findOne({ email: newEmail });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Cet e-mail est déjà utilisé.' });
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+
+    user.email = newEmail;
+    await user.save();
+
+    res.status(200).json({ message: 'E-mail mis à jour avec succès.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+exports.updateUsername = async (req, res) => {
+  const { userId } = req.user;
+  const { newUsername } = req.body;
+
+  try {
+    const existingUser = await UserModel.findOne({ username: newUsername });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Ce nom d\'utilisateur est déjà pris.' });
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+
+    user.username = newUsername;
+    await user.save();
+
+    res.status(200).json({ message: 'Nom d\'utilisateur mis à jour avec succès.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+

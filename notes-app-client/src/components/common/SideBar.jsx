@@ -1,16 +1,22 @@
 import { NavLink} from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useNavigate } from 'react-router-dom'
 import {faArrowRightFromBracket,faWrench,faFeather,faList,faBookOpen,faHouse, faCircleUser,faGear} from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from "react"
 
 export default function SideBar(){
 
   const navigate = useNavigate()
+  const [user,setUser] = useState({})
 
   function logOut(){
     localStorage.removeItem('tkn_notes')
     navigate('/login')
   }
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user_notes'))) 
+  }, [])
 
   return( 
     <>
@@ -28,8 +34,8 @@ export default function SideBar(){
                 <div className="mt-4 px-5 flex flex-row items-center ">
                     <FontAwesomeIcon icon={faCircleUser} className=" text-gray-300 text-xl"/>
                     <div className="ml-3 flex flex-col">
-                        <span className="font-bold"> FirstName lastName</span>
-                        <span className=" text-gray-400">Role</span>
+                        <span className="font-bold"> {user?.username || "Utilisateur"}</span>
+                        <span className=" text-gray-400">{user?.email || "email"}</span>
                     </div>
                 </div>
                 <div className="h-10 my-4 flex items-center font-semibold px-6 hover:text-[#e11d48] hover:border-r-2 hover:border-r-[#e11d48] ">
@@ -73,7 +79,7 @@ export default function SideBar(){
                         <span className="flex items-center w-full ">
                             <FontAwesomeIcon icon={ faWrench} className="text-sm" />
                             <span className="ml-3">
-                                Gestion des categories
+                               Gestion des categories
                             </span>
                         </span>
                     </NavLink>
@@ -91,31 +97,3 @@ export default function SideBar(){
     </>
   )
 }
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import {faBookOpen} from '@fortawesome/free-solid-svg-icons'
-// import { useNavigate } from 'react-router-dom'
-
-// export default function SideBar(){
-
-//   const navigate = useNavigate()
-
-//   const logOut = ()=>{
-//     navigate('/login')
-//   }
-
-//   return(
-//     <div className="h-screen relative p-6 bg-[#020617] text-white min-w-80">
-//       <div className="flex flex-row items-center">
-//         <FontAwesomeIcon icon={faBookOpen} className="text-2xl mr-2 text-[#e11d48]" />
-//         <span className="text-2xl">Notes bloc</span>
-//       </div>
-//       <div></div>
-//       <div className="absolute py-8 bottom-0">
-//         <button 
-//           type='button'
-//           onClick={logOut}
-//           className='h-8 px-3 w-full rounded-md' >Se deconnecter</button>
-//       </div>
-//     </div>
-//   )
-// }

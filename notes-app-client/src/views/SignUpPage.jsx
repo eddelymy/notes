@@ -24,7 +24,8 @@ export default function SignUpPage(){
 
     try{
         const response = await userService.signUp({username:username,email:email,password:password,passwordConfirm:passwordConfirm})
-        localStorage.setItem('tkn_notes', response.data.token)        
+        localStorage.setItem('tkn_notes', response.data.token) 
+        localStorage.setItem('user_notes', JSON.stringify(response.data.user))       
         form.reset()
         navigate('/')
       

@@ -5,7 +5,7 @@ import {string,object,ref} from 'yup'
 
 let loginSchema = object({
   username: string().label('username').required('L\'utilisateur est requis'),
-  password: string().label('password').min(8,'Mot de passe faible')
+  password: string().label('password').required('L\'utilisateur est requis')
 })
 let signUpSchema = object({
   username: string().label('username').required('L\'utilisateur est requis'),

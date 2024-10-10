@@ -27,6 +27,7 @@ export default function Login(){
     try{
       const response = await userService.login({username:username,password:password})
       localStorage.setItem('tkn_notes', response.data.token)
+      localStorage.setItem('user_notes', JSON.stringify(response.data.user)) 
       form.reset()
       navigate(redirectPath)
     }catch(error){
