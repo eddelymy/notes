@@ -3,37 +3,81 @@ const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config/Jwt') || 'supersecretkey'
 const transporter = require('../config/mailer')
 const crypto = require('crypto')
+const bcrypt = require('bcrypt');
+
+const generateRandomPassword = () => {
+  const length = 8; // Longueur du mot de passe
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+};
 
 exports.sendResetPasswordEmail = async (req, res) => {
   const { email } = req.body;
-
+  console.log(email)
   const user = await UserModel.findOne({ email });
+
   if (!user) {
     return res.status(404).json({ message: 'Utilisateur non trouvé.' });
   }
 
-  const token = crypto.randomBytes(20).toString('hex');
-  user.resetPasswordToken = token;
-  user.resetPasswordExpires = Date.now() + 3600000; 
+  const newPassword = generateRandomPassword();
+  const hashedPassword = await bcrypt.hash(newPassword, 8); 
 
+  user.password = hashedPassword; 
   await user.save();
 
   const mailOptions = {
     from: 'eddelymyamina@gmail.com',
     to: user.email,
-    subject: 'Réinitialisation du mot de passe',
-    text: `Vous avez demandé une réinitialisation de votre mot de passe. Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe : 
-    http://localhost:5174/reset_password/${token}`,
+    subject: 'Votre nouveau mot de passe',
+    text: `Votre nouveau mot de passe est : ${newPassword}. Veuillez le changer dès que possible.`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log(error)
+      console.log('Erreur lors de l\'envoi de l\'email :', error);
       return res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email.' });
     }
-    res.status(200).json({ message: 'E-mail de réinitialisation envoyé.' });
+    res.status(200).json({ message: 'Un nouveau mot de passe a été envoyé à votre adresse email.' });
   });
 };
+
+
+// exports.sendResetPasswordEmail = async (req, res) => {
+//   const { email } = req.body;
+
+//   const user = await UserModel.findOne({ email });
+//   if (!user) {
+//     return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+//   }
+
+//   const token = crypto.randomBytes(20).toString('hex');
+//   user.resetPasswordToken = token;
+//   user.resetPasswordExpires = Date.now() + 3600000; 
+
+//   await user.save();
+
+//   const mailOptions = {
+//     from: 'eddelymyamina@gmail.com',
+//     to: user.email,
+//     subject: 'Réinitialisation du mot de passe',
+//     text: `Vous avez demandé une réinitialisation de votre mot de passe. Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe : 
+//     http://localhost:5174/reset_password/${token}`,
+//   };
+
+//   transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//       console.log(error)
+//       return res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email.' });
+//     }
+//     res.status(200).json({ message: 'E-mail de réinitialisation envoyé.' });
+//   });
+// };
 
 exports.signUp = async (req, res) => {
   const { username, email, password } = req.body

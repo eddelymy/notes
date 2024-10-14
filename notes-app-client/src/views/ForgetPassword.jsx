@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBookOpen} from '@fortawesome/free-solid-svg-icons'
+import FlashComponent from "../components/common/FlashComponent"
 import userService from "../service/user/user.service"
 import { setErrors } from "../helpers/error"
 import {flash} from '../plugins/flash'
@@ -20,6 +21,7 @@ export default function ForgetPassword(){
       const response = await userService.sendResetPasswordEmail(email)
       flash(response.data.message, 'success')
     }catch(error){
+      console.log(error)
       if(error?.response?.data?.message){
         flash(error.response.data.message, 'error')
       }
@@ -27,9 +29,9 @@ export default function ForgetPassword(){
     }
   }
   return(
-     <div className="h-screen w-full flex flex-col p-6">
+     <div className="h-screen w-full flex flex-col p-6 relative">
       <div className="flex flex-row items-center">
-           <FontAwesomeIcon icon={faBookOpen} className="text-2xl mr-2 text-[#e11d48]" />
+        <FontAwesomeIcon icon={faBookOpen} className="text-2xl mr-2 text-[#e11d48]" />
       </div>
       <div className="flex items-center justify-center h-full">
         <div className="w-[400px] p-6 flex flex-col rounded-md border bg-white">
@@ -55,6 +57,9 @@ export default function ForgetPassword(){
           </form>
         </div>
      </div>
+     <div className="absolute right-0 bottom-10 z-50">
+        <FlashComponent/>
+      </div> 
      
    </div>
    
