@@ -6,7 +6,7 @@
   font-family: 'Poppins';   
   font-style: normal;   
   font-weight: 400;   
-  src: local('Poppins'),url(/src/assets/fonts/Poppins-Regular.ttf) format('truetype'); 
+  src: local('Poppins'),url(../fonts/Poppins-Regular.ttf) format('truetype'); 
 }
 @font-face {   
   font-family: 'Sevillana';   
@@ -64,7 +64,7 @@ a.active {
 
 @layer components{
   .login{
-    @apply h-screen w-full bg-[url('src/assets/images/notebook.jpg')] bg-no-repeat bg-cover p-6
+    @apply h-screen w-full bg-[url('../images/notebook.jpg')] bg-no-repeat bg-cover p-6
   }
   .item{
     @apply h-10 px-6 flex items-center font-semibold hover:text-[var(--pink)] hover:border-r-2 hover:border-r-[var(--pink)]
